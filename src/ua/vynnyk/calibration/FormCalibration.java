@@ -17,6 +17,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import net.miginfocom.swing.MigLayout;
+import ua.vynnyk.calibration.components.CompositeComponent;
 import ua.vynnyk.calibration.database.CalibrationToData;
 import ua.vynnyk.calibration.database.MeterToData;
 import ua.vynnyk.calibration.entity.Calibration;
@@ -54,6 +55,8 @@ public class FormCalibration extends JDialog {
         
         JLabel meterLabel = new JLabel("Водомір");
         JTextField meterField = new JTextField(20);
+        JButton meterButton = new JButton("+");
+        CompositeComponent componentMeter = new CompositeComponent(meterField, meterButton);
         
         JLabel error0Label = new JLabel("Початкова похибка");
         JTextField error0Field = new JTextField(20);
@@ -83,7 +86,7 @@ public class FormCalibration extends JDialog {
         panel.add(idLabel, "align right");
         panel.add(idField);
         panel.add(meterLabel, "align right");
-        panel.add(meterField, "wrap");
+        panel.add(componentMeter, "wrap");
         panel.add(error0Label, "align right");
         panel.add(error0Field);
         panel.add(error1Label, "align right");
@@ -121,7 +124,7 @@ public class FormCalibration extends JDialog {
         
         pack();
         setLocationRelativeTo(frame);
-        setResizable(false);
+        //setResizable(false);
         
         addListeners();        
     } 
