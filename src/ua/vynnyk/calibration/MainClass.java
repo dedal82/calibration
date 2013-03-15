@@ -20,7 +20,8 @@ public class MainClass {
      * @param args the command line arguments
      */
     public static void main(String args[]) {        
-        initConnection();
+        con = getConnection();
+        
         setLookAndFeel();
                               
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -29,16 +30,19 @@ public class MainClass {
                 new FormMain().setVisible(true);
             }
         });
+        
+        closeConnection(con);
     }   
     
-    private static void initConnection() {        
+    public static Connection getConnection() {        
         try {
             Class.forName("org.hsqldb.jdbcDriver");
-            con = DriverManager.getConnection("jdbc:hsqldb:file:./data/calibration", "sa", "");            
+            return DriverManager.getConnection("jdbc:hsqldb:file:./data/calibration", "sa", "");            
         } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(MainClass.class.getName()).log(Level.SEVERE, null, ex);
         }
-    };
+        return null;
+    }
 
     private static void setLookAndFeel() {
         try {
@@ -51,5 +55,15 @@ public class MainClass {
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(MainClass.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+    }
+
+    public static void closeConnection(Connection con) {
+        if (con != null) {
+            try {
+                con.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(MainClass.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }    
     }
 }

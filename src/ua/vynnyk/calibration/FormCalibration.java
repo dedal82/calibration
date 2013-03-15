@@ -8,6 +8,8 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Frame;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.Connection;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -27,7 +29,11 @@ public class FormCalibration extends JDialog {
     private Frame frame;
     private CalibrationToData calibtationToData;
     private MeterToData meterToData;
-    private Calibration calibration;              
+    private Calibration calibration;  
+    private JButton addButton;
+    private JButton updButton;
+    private JButton delButton;
+    private JButton closeButton;
 
     public void setCalibration(Calibration calibration) {
         this.calibration = calibration;
@@ -97,13 +103,13 @@ public class FormCalibration extends JDialog {
         add(panel, BorderLayout.CENTER);
         
         Dimension btnDimension = new Dimension(95, 28);
-        JButton addButton = new JButton("Добавити");
+        addButton = new JButton("Добавити");
         addButton.setPreferredSize(btnDimension);
-        JButton updButton = new JButton("Змінити");
+        updButton = new JButton("Змінити");
         updButton.setPreferredSize(btnDimension);
-        JButton delButton = new JButton("Видалити");
+        delButton = new JButton("Видалити");
         delButton.setPreferredSize(btnDimension);
-        JButton closeButton = new JButton("Закрити");
+        closeButton = new JButton("Закрити");
         closeButton.setPreferredSize(btnDimension);
         
         JPanel panelButtons = new JPanel(new FlowLayout(FlowLayout.RIGHT));
@@ -116,5 +122,16 @@ public class FormCalibration extends JDialog {
         pack();
         setLocationRelativeTo(frame);
         setResizable(false);
+        
+        addListeners();        
     } 
+
+    private void addListeners() {
+        addButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                ;
+            }
+        });
+    }
 }

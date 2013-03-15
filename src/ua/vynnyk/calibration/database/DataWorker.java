@@ -58,9 +58,8 @@ public class DataWorker {
         if (queryBilder.getFieldCount() == params.size() + 1) {
             String query = queryBilder.getInsertQuery();               
             return ExecuteSQL(query, params);
-        } else {
-            return 0;
-        }
+        } 
+        return 0;
     }
     
     public int updateRecord(List<Object> params) {
@@ -116,5 +115,26 @@ public class DataWorker {
                 }
             }
         return 0;
+    }
+    
+    public int getIdentity() {
+        Statement st = null; 
+        try {
+            st = con.createStatement();
+            ResultSet rs = st.executeQuery("CALL IDENTITY()");
+            rs.next();
+            return rs.getInt(1);
+        } catch (SQLException e ) {
+            Logger.getLogger(DataWorker.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            if (st != null) {
+                try {
+                    st.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(DataWorker.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+        return -1;
     }
 }

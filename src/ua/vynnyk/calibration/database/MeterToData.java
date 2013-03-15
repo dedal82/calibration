@@ -88,7 +88,10 @@ public class MeterToData {
         param.add(m.getTypesMeters().getId());
         param.add(m.getNumber());
         param.add(m.getYearProduce());              
-        return dw.insertRecord(param);        
+        if (dw.insertRecord(param) == 1) {
+            return dw.getIdentity();
+        }
+        return -1;
     }
     
     public int update(Meter m) {     
