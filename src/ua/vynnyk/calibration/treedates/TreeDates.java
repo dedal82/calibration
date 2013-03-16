@@ -12,8 +12,8 @@ import javax.swing.JTree;
  * @author vynnyk
  */
 public class TreeDates extends JTree {
-
-    public TreeDates(Date date) {
-        super(new NodeRoot(date));                            
+    
+    public TreeDates(Date date, OpenDateInterface openDate) {
+        super(new NodeRoot(date, openDate));                            
     }        
 }

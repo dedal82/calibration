@@ -57,6 +57,11 @@ public class TypeMeters {
     public void setPrecisions(String precisions) {
         this.precisions = precisions;
     }
+
+    @Override
+    public String toString() {
+        return name;
+    }        
 }
 
 

@@ -16,10 +16,8 @@ import javax.swing.JPanel;
 public class CompositeComponent extends JPanel {
 
     public CompositeComponent(JComponent component, JButton button) {
-        setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
-        //setBackground(component.getBackground());
-        //setBorder(component.getBorder());
-        //component.setBorder(null);
+        setLayout(new BoxLayout(this, BoxLayout.X_AXIS));       
+        setPreferredSize(component.getPreferredSize());
         add(component);        
         add(button);        
     }

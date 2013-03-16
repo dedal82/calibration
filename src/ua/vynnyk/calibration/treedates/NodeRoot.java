@@ -15,9 +15,12 @@ import java.util.List;
  * @author vynnyk
  */
 public class NodeRoot extends Node {
-
-    public NodeRoot(Date date) {
+    
+    private OpenDateInterface openDate;
+    
+    public NodeRoot(Date date, OpenDateInterface openDate) {
         super(date);
+        this.openDate = openDate;
     }
 
     @Override
@@ -52,4 +55,8 @@ public class NodeRoot extends Node {
     public boolean isLeaf() {
         return false;
     }
+
+    public void openDate(Date date) {        
+        openDate.openDate(date);
+    }        
 }

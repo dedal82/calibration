@@ -12,7 +12,9 @@ import java.util.Date;
  * @author vynnyk
  */
 public class NodeDate extends Node {
-
+    
+    private OpenDateInterface openDate;
+    
     public NodeDate(Date date) {
         super(date);
     }
@@ -24,7 +26,7 @@ public class NodeDate extends Node {
 
     @Override
     public void open() {
-        
+        ((NodeRoot) getRoot()).openDate(getDate());
     }
     
     

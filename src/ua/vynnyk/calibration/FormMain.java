@@ -9,25 +9,38 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
+import static javax.swing.Action.SHORT_DESCRIPTION;
 import javax.swing.border.EtchedBorder;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeSelectionModel;
+import ua.vynnyk.calibration.database.CalibrationToData;
 import ua.vynnyk.calibration.entity.Calibration;
 import ua.vynnyk.calibration.treedates.Node;
+import ua.vynnyk.calibration.treedates.OpenDateInterface;
 import ua.vynnyk.calibration.treedates.TreeDates;
 
 /**
  *
  * @author vynnyk
  */
-public class FormMain extends JFrame {
+public class FormMain extends JFrame {    
     
     public FormMain() {
+        con = openConnection();
+        calibrationToData = new CalibrationToData(con);
         initComponents();
     }
     
@@ -42,13 +55,17 @@ public class FormMain extends JFrame {
         });
     }    
 
-    private void initComponents() { 
+    private void initComponents() {
+        
+        setLookAndFeel();
+        
        //Actions
        Action exitAction = new AbstractAction("Вихід") {{
             putValue(SHORT_DESCRIPTION, "Завершення роботи програми");    
             }
             @Override
             public void actionPerformed(ActionEvent ae) {
+                closeConnection(con);
                 System.exit(0);
             }
         };
@@ -58,7 +75,16 @@ public class FormMain extends JFrame {
             }
             @Override
             public void actionPerformed(ActionEvent ae) {
-                new FormCalibration(FormMain.this, "Повірка", true, MainClass.con).setVisible(true);
+                new FormCalibration(FormMain.this, "Повірка", true, con).setVisible(true);
+            }
+        };
+       
+       Action refreshAction = new AbstractAction("Оновити") {{
+            putValue(SHORT_DESCRIPTION, "Оновлення інформації з бази даних");    
+            }
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                ((Node) tree.getLastSelectedPathComponent()).open();
             }
         };
        
@@ -85,7 +111,14 @@ public class FormMain extends JFrame {
        // дерево 
        Calendar tmpDate = Calendar.getInstance();
        tmpDate.set(2012, 0, 1); 
-       tree = new TreeDates(tmpDate.getTime());
+       
+       tree = new TreeDates(tmpDate.getTime(), new OpenDateInterface() {
+            @Override
+            public void openDate(Date date) {
+                refreshData(date);
+            }
+        });
+       
        tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
        ((Node) tree.getModel().getRoot()).open();
        ((DefaultTreeModel) tree.getModel()).reload();
@@ -105,7 +138,7 @@ public class FormMain extends JFrame {
        //грід
        
        splitPane = new JSplitPane();       
-       splitPane.setDividerLocation(150);
+       splitPane.setDividerLocation(170);
        splitPane.setLeftComponent(scrollTree);
        splitPane.setRightComponent(scrollTable);       
        //дерево і грід
@@ -151,6 +184,7 @@ public class FormMain extends JFrame {
        add(statusPanel, BorderLayout.SOUTH);
        //
        pack();
+       setLocationRelativeTo(null);
     }
     
     private void treeDatesValueChanged(TreeSelectionEvent tse) {
@@ -160,6 +194,53 @@ public class FormMain extends JFrame {
         }
         node.open(); 
     }
+    
+    private Connection openConnection() {        
+        try {
+            Class.forName("org.hsqldb.jdbcDriver");
+            return DriverManager.getConnection("jdbc:hsqldb:file:./data/calibration", "sa", "");            
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(FormMain.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
+    private void closeConnection(Connection con) {
+        if (con != null) {
+            try {
+                con.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(FormMain.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }    
+    }
+
+    private static void setLookAndFeel() {
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(FormMain.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+    }  
+    
+    private void refreshData(Date date) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        calibrations = calibrationToData.selects("where dates = \'" + sdf.format(date) + "\'");        
+    }
+    
+    public Connection getConnection() {
+        return con;
+    }
+    
+    private Connection con;
+    
+    private CalibrationToData calibrationToData;
+    private List<Calibration> calibrations;
     
     private Dimension btnDimension;
     private JMenuBar menuBar;
