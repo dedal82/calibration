@@ -4,6 +4,7 @@
  */
 package ua.vynnyk.calibration;
 
+import ua.vynnyk.calibration.components.CalibrationTableModel;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -28,9 +29,9 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeSelectionModel;
 import ua.vynnyk.calibration.database.CalibrationToData;
 import ua.vynnyk.calibration.entity.Calibration;
-import ua.vynnyk.calibration.treedates.Node;
-import ua.vynnyk.calibration.treedates.OpenDateInterface;
-import ua.vynnyk.calibration.treedates.TreeDates;
+import ua.vynnyk.calibration.components.treedates.Node;
+import ua.vynnyk.calibration.components.treedates.OpenDateInterface;
+import ua.vynnyk.calibration.components.treedates.TreeDates;
 
 /**
  *

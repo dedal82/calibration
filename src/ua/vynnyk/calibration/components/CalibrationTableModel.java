@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package ua.vynnyk.calibration;
+package ua.vynnyk.calibration.components;
 
 import java.util.List;
 import javax.swing.event.TableModelListener;

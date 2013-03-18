@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package ua.vynnyk.calibration.treedates;
+package ua.vynnyk.calibration.components.treedates;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
