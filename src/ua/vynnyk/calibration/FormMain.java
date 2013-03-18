@@ -4,7 +4,6 @@
  */
 package ua.vynnyk.calibration;
 
-import ua.vynnyk.calibration.components.CalibrationTableModel;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -27,21 +26,45 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeSelectionModel;
-import ua.vynnyk.calibration.database.CalibrationToData;
-import ua.vynnyk.calibration.entity.Calibration;
+import ua.vynnyk.calibration.components.CalibrationTableModel;
 import ua.vynnyk.calibration.components.treedates.Node;
 import ua.vynnyk.calibration.components.treedates.OpenDateInterface;
 import ua.vynnyk.calibration.components.treedates.TreeDates;
+import ua.vynnyk.calibration.database.CalibrationToData;
+import ua.vynnyk.calibration.entity.Calibration;
 
 /**
  *
  * @author vynnyk
  */
 public class FormMain extends JFrame {    
+    private Connection con;    
+    private CalibrationToData calibrationToData;
+    private List<Calibration> calibrations;
+    
+    private Dimension btnDimension;
+    private JMenuBar menuBar;
+    private JToolBar toolBar;
+    private JSplitPane splitPane;
+    private JScrollPane scrollTree;
+    private JTree tree;
+    private JScrollPane scrollTable;
+    private JTable table;
+    private JPanel buttonPanel;
+    private JButton addButton;
+    private JButton updButton;
+    private JButton delButton;
+    private JPanel statusPanel;
+    private JLabel status1;
+    private JLabel status2;
+    private JMenu menuCalibration;
+    private JMenu menuReport;
+    private JMenu menuHelp;     
     
     public FormMain() {
         con = openConnection();
         calibrationToData = new CalibrationToData(con);
+        calibrations = new ArrayList();
         initComponents();
     }
     
@@ -132,7 +155,7 @@ public class FormMain extends JFrame {
        scrollTree = new JScrollPane(tree);             
        
        //грід
-       table = new JTable(new CalibrationTableModel(new ArrayList<Calibration>()));
+       table = new JTable(new CalibrationTableModel(calibrations));
        scrollTable = new JScrollPane(table);
        table.setFillsViewportHeight(true);
        table.setAutoCreateRowSorter(true);
@@ -236,29 +259,5 @@ public class FormMain extends JFrame {
     
     public Connection getConnection() {
         return con;
-    }
-    
-    private Connection con;
-    
-    private CalibrationToData calibrationToData;
-    private List<Calibration> calibrations;
-    
-    private Dimension btnDimension;
-    private JMenuBar menuBar;
-    private JToolBar toolBar;
-    private JSplitPane splitPane;
-    private JScrollPane scrollTree;
-    private JTree tree;
-    private JScrollPane scrollTable;
-    private JTable table;
-    private JPanel buttonPanel;
-    private JButton addButton;
-    private JButton updButton;
-    private JButton delButton;
-    private JPanel statusPanel;
-    private JLabel status1;
-    private JLabel status2;
-    private JMenu menuCalibration;
-    private JMenu menuReport;
-    private JMenu menuHelp;     
+    }        
 }

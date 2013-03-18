@@ -1,11 +1,21 @@
 package ua.vynnyk.calibration.entity;
 
-import ua.vynnyk.calibration.entity.Meter;
 import java.math.BigDecimal;
 import java.util.Date;
 
 public class Calibration {
-
+     
+     public static String[] title = new String[] {"№",
+                                                  "Водомір",
+                                                  "Початкова похибка",
+                                                  "Похибка 1",
+                                                  "Похибка 2",
+                                                  "Похибка 3",
+                                                  "Показник зняття",
+                                                  "Показник встановлення",
+                                                  "ДСТУ №",
+                                                  "ДСТУ пломба"};
+    
      private int id;
      private Meter meters;
      private Date dates;

@@ -5,60 +5,21 @@
 package ua.vynnyk.calibration.components;
 
 import java.util.List;
-import javax.swing.event.TableModelListener;
-import javax.swing.table.TableModel;
 import ua.vynnyk.calibration.entity.Calibration;
-
 
 /**
  *
  * @author vynnyk
  */
-public class CalibrationTableModel implements TableModel {
-    final private String[] column = new String[] {"№",
-                                                  "Водомір",
-                                                  "Початкова похибка",
-                                                  "Похибка 1",
-                                                  "Похибка 2",
-                                                  "Похибка 3",
-                                                  "Показник зняття",
-                                                  "Показник встановлення",
-                                                  "ДСТУ №",
-                                                  "ДСТУ пломба"};
-    private List<Calibration> calibrationList;
-    
-    public CalibrationTableModel(List<Calibration> calibrationList) {
-        this.calibrationList = calibrationList;
-    }
-    
-    @Override
-    public int getRowCount() {
-        return calibrationList.size();
-    }
+public class CalibrationTableModel extends AbstracGenerictListTableModel<Calibration> {
 
-    @Override
-    public int getColumnCount() {
-        return column.length;
-    }
-
-    @Override
-    public String getColumnName(int i) {
-        return column[i];
-    }
-
-    @Override
-    public Class<?> getColumnClass(int i) {
-        return Object.class;
-    }
-
-    @Override
-    public boolean isCellEditable(int i, int i1) {
-        return false;
+    public CalibrationTableModel(List<Calibration> dataList) {
+        super(Calibration.title, dataList);
     }
 
     @Override
     public Object getValueAt(int i, int i1) {
-        final Calibration calibtation = calibrationList.get(i);
+        final Calibration calibtation = dataList.get(i);
         switch (i1) {
             case 0: return calibtation.getId(); 
             case 1: return calibtation.getMeters().getNumber();
@@ -72,21 +33,5 @@ public class CalibrationTableModel implements TableModel {
             case 9: return calibtation.getDstuSeal();
         }
         return null;
-    }
-
-    @Override
-    public void setValueAt(Object o, int i, int i1) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void addTableModelListener(TableModelListener tl) {
-        
-    }
-
-    @Override
-    public void removeTableModelListener(TableModelListener tl) {
-        
-    }
-    
+    }   
 }
