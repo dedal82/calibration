@@ -20,6 +20,7 @@ import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 import net.miginfocom.swing.MigLayout;
 import ua.vynnyk.calibration.components.CompositeComponent;
+import ua.vynnyk.calibration.components.Focus;
 import ua.vynnyk.calibration.database.CalibrationToData;
 import ua.vynnyk.calibration.database.MeterToData;
 import ua.vynnyk.calibration.database.TypeMetersToData;
@@ -39,7 +40,18 @@ public class FormCalibration extends JDialog {
     private JButton updButton;
     private JButton delButton;
     private JButton closeButton;
-
+    private JTextField meterField;
+    private JComboBox typesComboBox;
+    private JTextField yearField;
+    private JTextField error0Field;
+    private JTextField error1Field;
+    private JTextField error2Field;
+    private JTextField error3Field;
+    private JTextField meterageStField;
+    private JTextField meterageEndField;
+    private JTextField numberDSTUField;
+    private JTextField sealDSTUField;
+    
     public void setCalibration(Calibration calibration) {
         this.calibration = calibration;
     }
@@ -56,42 +68,47 @@ public class FormCalibration extends JDialog {
     private void initComponents() {
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         JLabel meterLabel = new JLabel("Заводський №");
-        JTextField meterField = new JTextField(20);
+        meterField = new JTextField(20);
         JButton meterButton = new JButton("Знайти...");
         CompositeComponent componentMeter = new CompositeComponent(meterField, meterButton);
         
         JLabel typesLabel = new JLabel("Тип водоміра");
-        JComboBox typesComboBox = new JComboBox(typeMeters.selects(null).toArray());
+        typesComboBox = new JComboBox(typeMeters.selects(null).toArray());
                 
+        JLabel yearLabel = new JLabel("Рік виробництва");
+        yearField = new JTextField(20);
+        
         JLabel error0Label = new JLabel("Початкова похибка");
-        JTextField error0Field = new JTextField(20);
+        error0Field = new JTextField(20);
         
         JLabel error1Label = new JLabel("Похибка 1");
-        JTextField error1Field = new JTextField(20);
+        error1Field = new JTextField(20);
         
         JLabel error2Label = new JLabel("Похибка 2");
-        JTextField error2Field = new JTextField(20);
+        error2Field = new JTextField(20);
         
         JLabel error3Label = new JLabel("Похибка 3");
-        JTextField error3Field = new JTextField(20);
+        error3Field = new JTextField(20);
         
         JLabel meterageStLabel = new JLabel("Початковий показник");
-        JTextField meterageStField = new JTextField(20);
+        meterageStField = new JTextField(20);
         
         JLabel meterageEndLabel = new JLabel("Кінцевий показник");
-        JTextField meterageEndField = new JTextField(20);
+        meterageEndField = new JTextField(20);
         
         JLabel numberDSTULabel = new JLabel("Довідка ДСТУ");
-        JTextField numberDSTUField = new JTextField(20);
+        numberDSTUField = new JTextField(20);
         
         JLabel sealDSTULabel = new JLabel("Пломба ДСТУ");
-        JTextField sealDSTUField = new JTextField(20);
+        sealDSTUField = new JTextField(20);
         
         JPanel panel = new JPanel(new MigLayout("wrap 4","[align right][][align right][]",""));        
         panel.add(meterLabel);
         panel.add(componentMeter, "grow");
         panel.add(typesLabel);
         panel.add(typesComboBox, "grow");
+        panel.add(yearLabel);
+        panel.add(yearField, "wrap");
         panel.add(error0Label);
         panel.add(error0Field, "grow");
         panel.add(error1Label);
@@ -131,7 +148,10 @@ public class FormCalibration extends JDialog {
         setLocationRelativeTo(frame);
         setResizable(false);
         
-        addListeners();        
+        addListeners(); 
+        
+        Focus.setFocusNexComponentKey(panel);
+        
     } 
 
     private void addListeners() {
