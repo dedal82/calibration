@@ -2,23 +2,17 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package ua.vynnyk.calibration;
+package ua.vynnyk.calibration.view;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.*;
 import static javax.swing.Action.SHORT_DESCRIPTION;
 import javax.swing.border.EtchedBorder;
@@ -26,20 +20,21 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeSelectionModel;
+import ua.vynnyk.calibration.DB;
 import ua.vynnyk.calibration.components.CalibrationTableModel;
 import ua.vynnyk.calibration.components.treedates.Node;
 import ua.vynnyk.calibration.components.treedates.OpenDateInterface;
 import ua.vynnyk.calibration.components.treedates.TreeDates;
-import ua.vynnyk.calibration.model.data.CalibrationToData;
+import ua.vynnyk.calibration.controler.Controler;
 import ua.vynnyk.calibration.model.entity.Calibration;
 
 /**
  *
  * @author vynnyk
  */
-public class FormMain extends JFrame {    
-    private Connection con;    
-    private CalibrationToData calibrationToData;
+public class FormMain extends JFrame implements View {    
+    private Controler controler;
+    
     private List<Calibration> calibrations;
     
     private Dimension btnDimension;
@@ -61,23 +56,12 @@ public class FormMain extends JFrame {
     private JMenu menuReport;
     private JMenu menuHelp;     
     
-    public FormMain() {
-        con = openConnection();
-        calibrationToData = new CalibrationToData(con);
-        calibrations = new ArrayList();
+    public FormMain(Controler controler) {        
+        this.controler = controler;        
+        calibrations = new ArrayList();         
+               
         initComponents();
-    }
-    
-    
-    
-    public static void main(String[] args) {
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new FormMain().setVisible(true);
-            }
-        });
-    }    
+    }         
 
     private void initComponents() {
         
@@ -88,8 +72,7 @@ public class FormMain extends JFrame {
             putValue(SHORT_DESCRIPTION, "Завершення роботи програми");    
             }
             @Override
-            public void actionPerformed(ActionEvent ae) {
-                closeConnection(con);
+            public void actionPerformed(ActionEvent ae) {                 
                 System.exit(0);
             }
         };
@@ -99,7 +82,7 @@ public class FormMain extends JFrame {
             }
             @Override
             public void actionPerformed(ActionEvent ae) {
-                new FormCalibration(FormMain.this, "Повірка", true, con).setVisible(true);
+                new FormCalibration(FormMain.this, "Повірка", true).setVisible(true);
             }
         };
        
@@ -218,27 +201,7 @@ public class FormMain extends JFrame {
         }
         node.open(); 
     }
-    
-    private Connection openConnection() {        
-        try {
-            Class.forName("org.hsqldb.jdbcDriver");
-            return DriverManager.getConnection("jdbc:hsqldb:file:./data/calibration", "sa", "");            
-        } catch (SQLException | ClassNotFoundException ex) {
-            Logger.getLogger(FormMain.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
-    }
-    
-    private void closeConnection(Connection con) {
-        if (con != null) {
-            try {
-                con.close();
-            } catch (SQLException ex) {
-                Logger.getLogger(FormMain.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }    
-    }
-
+        
     private static void setLookAndFeel() {
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -252,12 +215,8 @@ public class FormMain extends JFrame {
         }
     }  
     
-    private void refreshData(Date date) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        calibrations = calibrationToData.selects("where dates = \'" + sdf.format(date) + "\'");        
+    private void refreshData(Date date) {        
+        calibrations = controler.getCalibrations(date); 
     }
-    
-    public Connection getConnection() {
-        return con;
-    }        
+              
 }

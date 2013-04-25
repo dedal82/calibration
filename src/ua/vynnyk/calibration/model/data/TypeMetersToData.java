@@ -17,7 +17,7 @@ import ua.vynnyk.calibration.model.entity.TypeMeters;
  *
  * @author vynnyk
  */
-class TypeMetersToData implements DataInterface<TypeMeters> {
+class TypeMetersToData implements Entity<TypeMeters> {
     
     private static final String tableName;
     private static final List<String> fields = new ArrayList<>();

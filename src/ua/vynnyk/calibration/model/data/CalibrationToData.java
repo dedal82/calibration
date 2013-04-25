@@ -18,7 +18,7 @@ import ua.vynnyk.calibration.model.entity.Meter;
  *
  * @author vynnyk
  */
-class CalibrationToData implements DataInterface<Calibration> {
+class CalibrationToData implements Entity<Calibration> {
     private static final String tableName;
     private static final List<String> fields = new ArrayList<>();
     static {

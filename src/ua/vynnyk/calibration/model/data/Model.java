@@ -5,36 +5,36 @@
 package ua.vynnyk.calibration.model.data;
 
 import java.sql.Connection;
-import ua.vynnyk.calibration.model.entity.Calibration;
 
 /**
  *
- * @author vynnyk
+ * @author Admin
  */
-public class Model {
+public interface Model {
+
+    /**
+     *
+     * @return
+     */
+    Connection getConnection();
+
+    /**
+     *
+     * @param c
+     * @return
+     */
+    Entity getEntityModel(Class c);
+
+    /**
+     *
+     * @return
+     */
+    boolean isConnected();
+
+    /**
+     *
+     * @param con
+     */
+    void setConnection(Connection con);
     
-    private Connection con;
-
-    public Model() {
-    }
-
-    public Model(Connection con) {
-        this.con = con;
-    }
-            
-    public <T> DataInterface<T> getEntityModel(T entity) {
-        if (entity instanceof Calibration) {
-            DataInterface<Calibration> data = new CalibrationToData<Calibration>(con);
-            return data;
-        }
-        return null;
-    }
-
-    public Connection getCon() {
-        return con;
-    }
-
-    public void setCon(Connection con) {
-        this.con = con;
-    }        
 }

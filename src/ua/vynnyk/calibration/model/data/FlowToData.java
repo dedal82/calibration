@@ -17,7 +17,7 @@ import ua.vynnyk.calibration.model.entity.Flow;
  *
  * @author vynnyk
  */
-class FlowToData implements DataInterface<Flow> {
+class FlowToData implements Entity<Flow> {
     
     private static final String tableName;
     private static final List<String> fields = new ArrayList<>();

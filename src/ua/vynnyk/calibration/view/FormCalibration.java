@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package ua.vynnyk.calibration;
+package ua.vynnyk.calibration.view;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -21,9 +21,6 @@ import javax.swing.WindowConstants;
 import net.miginfocom.swing.MigLayout;
 import ua.vynnyk.calibration.components.CompositeComponent;
 import ua.vynnyk.calibration.components.Focus;
-import ua.vynnyk.calibration.model.data.CalibrationToData;
-import ua.vynnyk.calibration.model.data.MeterToData;
-import ua.vynnyk.calibration.model.data.TypeMetersToData;
 import ua.vynnyk.calibration.model.entity.Calibration;
 
 /**
@@ -32,9 +29,6 @@ import ua.vynnyk.calibration.model.entity.Calibration;
  */
 public class FormCalibration extends JDialog {
     private Frame frame;
-    private CalibrationToData calibtationToData;
-    private MeterToData meterToData;
-    private TypeMetersToData typeMeters;
     private Calibration calibration;  
     private JButton addButton;
     private JButton updButton;
@@ -56,12 +50,9 @@ public class FormCalibration extends JDialog {
         this.calibration = calibration;
     }
 
-    public FormCalibration(Frame frame, String string, boolean bln, Connection con) {
+    public FormCalibration(Frame frame, String string, boolean bln) {
         super(frame, string, bln);
-        this.frame = frame;
-        calibtationToData = new CalibrationToData(con);
-        meterToData = new MeterToData(con);
-        typeMeters = new TypeMetersToData(con);
+        this.frame = frame;       
         initComponents();
     }
 
@@ -73,7 +64,7 @@ public class FormCalibration extends JDialog {
         CompositeComponent componentMeter = new CompositeComponent(meterField, meterButton);
         
         JLabel typesLabel = new JLabel("Тип водоміра");
-        typesComboBox = new JComboBox(typeMeters.selects(null).toArray());
+        //typesComboBox = new JComboBox(typeMeters.selects(null).toArray());
                 
         JLabel yearLabel = new JLabel("Рік виробництва");
         yearField = new JTextField(20);
