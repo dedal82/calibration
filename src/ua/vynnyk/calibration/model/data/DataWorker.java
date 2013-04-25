@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package ua.vynnyk.calibration.database;
+package ua.vynnyk.calibration.model.data;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -19,6 +19,7 @@ import java.util.logging.Logger;
  * @author vynnyk
  */
 public class DataWorker {
+    
     private QueryBuilder queryBilder;  
     private Connection con;
     
@@ -32,26 +33,19 @@ public class DataWorker {
         if (condition != null) {
             query = query + " " + condition;
         }        
-        Statement st = null; 
-        try {
-            st = con.createStatement();
+         
+        try (Statement st = con.createStatement()){            
             return st.executeQuery(query);
         } catch (SQLException e ) {
             Logger.getLogger(DataWorker.class.getName()).log(Level.SEVERE, null, e);
-        } finally {
-            if (st != null) {
-                try {
-                    st.close();
-                } catch (SQLException ex) {
-                    Logger.getLogger(DataWorker.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        }
+        } 
         return null;
     };
     
     public ResultSet selectRecord(int in) {
-        return selectRecords("where " + queryBilder.getIdField() + " = " + in);
+        StringBuilder sb = new StringBuilder();
+        sb.append("where ").append(queryBilder.getIdField()).append(" = ").append(in);
+        return selectRecords(sb.toString());
     };
             
     public int insertRecord(List<Object> params) {
@@ -74,6 +68,7 @@ public class DataWorker {
     public int deleteRecord(int id) {
         String query = queryBilder.getDeleteQuery();               
         List<Object> params = new ArrayList<>();
+        
         params.add(id);
         return ExecuteSQL(query, params);                
     }        
@@ -86,55 +81,38 @@ public class DataWorker {
         this.con = con;
     }  
     
-    public QueryBuilder getQueryBilder() {
+    QueryBuilder getQueryBilder() {
         return queryBilder;
     }
 
-    public void setQueryBilder(QueryBuilder queryBilder) {
+    void setQueryBilder(QueryBuilder queryBilder) {
         this.queryBilder = queryBilder;
     }
     
-    private int ExecuteSQL(String query, List<Object> params) {
-        PreparedStatement st = null; 
-            try {
-                st = con.prepareStatement(query);                        
-                int i = 1;
-                for (Object o: params) {
-                   st.setObject(i++, o); 
-                }            
-                return st.executeUpdate();
-            } catch (SQLException e ) {
-                Logger.getLogger(DataWorker.class.getName()).log(Level.SEVERE, null, e);
-            } finally {
-                if (st != null) {
-                    try {
-                        st.close();
-                    } catch (SQLException ex) {
-                        Logger.getLogger(DataWorker.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-            }
+    private int ExecuteSQL(String query, List<Object> params) {         
+        try (PreparedStatement st = con.prepareStatement(query)) {                                
+            int i = 1;
+
+            for (Object o: params) {
+               st.setObject(i++, o); 
+            }            
+
+            return st.executeUpdate();
+
+        } catch (SQLException e ) {
+            Logger.getLogger(DataWorker.class.getName()).log(Level.SEVERE, null, e);
+        } 
         return 0;
     }
     
-    public int getIdentity() {
-        Statement st = null; 
-        try {
-            st = con.createStatement();
+    public int getIdentity() {        
+        try (Statement st = con.createStatement()){            
             ResultSet rs = st.executeQuery("CALL IDENTITY()");
             rs.next();
             return rs.getInt(1);
         } catch (SQLException e ) {
             Logger.getLogger(DataWorker.class.getName()).log(Level.SEVERE, null, e);
-        } finally {
-            if (st != null) {
-                try {
-                    st.close();
-                } catch (SQLException ex) {
-                    Logger.getLogger(DataWorker.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        }
+        } 
         return -1;
     }
 }

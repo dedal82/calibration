@@ -1,9 +1,9 @@
-package ua.vynnyk.calibration.entity;
+package ua.vynnyk.calibration.model.entity;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class Calibration {
+public final class Calibration {
      
      public static String[] title = new String[] {"№",
                                                   "Водомір",
@@ -38,7 +38,9 @@ public class Calibration {
         this.dates = dates;
     }
     
-    public Calibration(int id, Meter meters, Date dates, BigDecimal error0, BigDecimal error1, BigDecimal error2, BigDecimal error3, BigDecimal meterageSt, BigDecimal meterageEnd, int dstuNumber, String dstuSeal) {
+    public Calibration(int id, Meter meters, Date dates, 
+                       BigDecimal error0, BigDecimal error1, BigDecimal error2, BigDecimal error3, 
+                       BigDecimal meterageSt, BigDecimal meterageEnd, int dstuNumber, String dstuSeal) {
        this.id = id;
        this.meters = meters;
        this.dates = dates;

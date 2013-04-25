@@ -1,6 +1,6 @@
-package ua.vynnyk.calibration.entity;
+package ua.vynnyk.calibration.model.entity;
 
-public class TypeMeters {
+public final class TypeMeters {
 
      private int id;
      private String name;

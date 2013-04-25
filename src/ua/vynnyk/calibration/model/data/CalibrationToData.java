@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package ua.vynnyk.calibration.database;
+package ua.vynnyk.calibration.model.data;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -11,14 +11,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import ua.vynnyk.calibration.entity.Calibration;
-import ua.vynnyk.calibration.entity.Meter;
+import ua.vynnyk.calibration.model.entity.Calibration;
+import ua.vynnyk.calibration.model.entity.Meter;
 
 /**
  *
  * @author vynnyk
  */
-public class CalibrationToData {
+class CalibrationToData implements DataInterface<Calibration> {
     private static final String tableName;
     private static final List<String> fields = new ArrayList<>();
     static {
@@ -38,7 +38,7 @@ public class CalibrationToData {
     private Connection con;
     private DataWorker dw;
 
-    public CalibrationToData(Connection con) {
+    CalibrationToData(Connection con) {
         this.con = con;
         this.dw = new DataWorker(new QueryBuilder(tableName, fields), con);
     }
@@ -65,6 +65,7 @@ public class CalibrationToData {
     }
     
     // повертає один обєкт з резултсету
+    @Override
     public Calibration select(int id) {
         ResultSet rs = dw.selectRecord(id);
         try {
@@ -80,6 +81,7 @@ public class CalibrationToData {
     }
     
     // повертає сет обєктів з резултсету
+    @Override
     public List<Calibration> selects(String condition) {
         ResultSet rs = dw.selectRecords(condition);
         if (rs != null) {
@@ -97,6 +99,7 @@ public class CalibrationToData {
         }
     }
     
+    @Override
     public int insert(Calibration c) {
         List<Object> param = new ArrayList<>();
         param.add(c.getMeters().getId());
@@ -113,6 +116,7 @@ public class CalibrationToData {
         return dw.insertRecord(param);        
     }
     
+    @Override
     public int update(Calibration c) {
         List<Object> param = new ArrayList<>();        
         param.add(c.getMeters().getId());
@@ -130,6 +134,7 @@ public class CalibrationToData {
         return dw.updateRecord(param);        
     }
     
+    @Override
     public int delete(Calibration c) {
         return dw.deleteRecord(c.getId());
     }

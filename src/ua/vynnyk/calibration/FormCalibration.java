@@ -21,10 +21,10 @@ import javax.swing.WindowConstants;
 import net.miginfocom.swing.MigLayout;
 import ua.vynnyk.calibration.components.CompositeComponent;
 import ua.vynnyk.calibration.components.Focus;
-import ua.vynnyk.calibration.database.CalibrationToData;
-import ua.vynnyk.calibration.database.MeterToData;
-import ua.vynnyk.calibration.database.TypeMetersToData;
-import ua.vynnyk.calibration.entity.Calibration;
+import ua.vynnyk.calibration.model.data.CalibrationToData;
+import ua.vynnyk.calibration.model.data.MeterToData;
+import ua.vynnyk.calibration.model.data.TypeMetersToData;
+import ua.vynnyk.calibration.model.entity.Calibration;
 
 /**
  *

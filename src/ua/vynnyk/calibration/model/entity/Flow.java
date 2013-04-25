@@ -1,8 +1,8 @@
-package ua.vynnyk.calibration.entity;
+package ua.vynnyk.calibration.model.entity;
 
 import java.math.BigDecimal;
 
-public class Flow {
+public final class Flow {
 
      private int id;
      private int diameter;
@@ -21,7 +21,8 @@ public class Flow {
         this.id = id;
         this.diameter = diameter;
     }
-    public Flow(int id, int diameter, BigDecimal capacity1, BigDecimal flow1, BigDecimal capacity2, BigDecimal flow2, BigDecimal capacity3, BigDecimal flow3) {
+    public Flow(int id, int diameter, BigDecimal capacity1, BigDecimal flow1, 
+                BigDecimal capacity2, BigDecimal flow2, BigDecimal capacity3, BigDecimal flow3) {
        this.id = id;
        this.diameter = diameter;
        this.capacity1 = capacity1;

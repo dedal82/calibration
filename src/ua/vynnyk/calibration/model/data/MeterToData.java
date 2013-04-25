@@ -1,8 +1,8 @@
-/* 
+/*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package ua.vynnyk.calibration.database;
+package ua.vynnyk.calibration.model.data;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -11,46 +11,42 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import ua.vynnyk.calibration.entity.Flow;
+import ua.vynnyk.calibration.model.entity.Meter;
+import ua.vynnyk.calibration.model.entity.TypeMeters;
 
 /**
  *
  * @author vynnyk
  */
-public class FlowToData {
+class MeterToData implements DataInterface<Meter> {
+    
     private static final String tableName;
     private static final List<String> fields = new ArrayList<>();
+    
     static {
-        tableName = "flows";
+        tableName = "meters";
         fields.add("id");               //0
-        fields.add("diameter");         //1
-        fields.add("capacity1");        //2
-        fields.add("flow1");            //3
-        fields.add("capacity2");        //4
-        fields.add("flow2");            //5
-        fields.add("capacity3");        //6
-        fields.add("flow3");            //7      
+        fields.add("types");            //1
+        fields.add("number");           //2
+        fields.add("year_produce");     //3        
     }
+    
     private Connection con;
     private DataWorker dw;
 
-    public FlowToData(Connection con) {
+    MeterToData(Connection con) {
         this.con = con;
         this.dw = new DataWorker(new QueryBuilder(tableName, fields), con);
     }
     
     // повертає один обєкт з поточного запису в резултсеті
-    private Flow sel(ResultSet rs) {      
+    private Meter sel(ResultSet rs) {      
         try {
-                Flow f = new Flow(rs.getInt(1),
-                              rs.getInt(2),  
-                              rs.getBigDecimal(3),
-                              rs.getBigDecimal(4),
-                              rs.getBigDecimal(5),
-                              rs.getBigDecimal(6), 
-                              rs.getBigDecimal(7),
-                              rs.getBigDecimal(8));
-            return f;
+            Meter m = new Meter(rs.getInt(1),
+                                new TypeMeters(rs.getInt(2)),
+                                rs.getString(3),
+                                rs.getInt(4));            
+            return m;
         } catch (SQLException ex) {
             Logger.getLogger(CalibrationToData.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -58,7 +54,7 @@ public class FlowToData {
     }
     
     // повертає один обєкт з резултсету
-    public Flow select(int id) {
+    public Meter select(int id) {
         ResultSet rs = dw.selectRecord(id);
         try {
             if (rs != null && rs.next()) {           
@@ -73,10 +69,10 @@ public class FlowToData {
     }
     
     // повертає сет обєктів з резултсету
-    public List<Flow> selects(String condition) {
+    public List<Meter> selects(String condition) {
         ResultSet rs = dw.selectRecords(condition);
         if (rs != null) {
-            List<Flow> cs = new ArrayList<>();
+            List<Meter> cs = new ArrayList<>();
             try {
                 while (rs.next()) {
                     cs.add(sel(rs));                    
@@ -90,32 +86,27 @@ public class FlowToData {
         }
     }
     
-    public int insert(Flow f) {
+    public int insert(Meter m) {
         List<Object> param = new ArrayList<>();        
-        param.add(f.getDiameter());
-        param.add(f.getCapacity1());
-        param.add(f.getFlow1());
-        param.add(f.getCapacity2());
-        param.add(f.getFlow2());
-        param.add(f.getCapacity3());
-        param.add(f.getFlow3());              
-        return dw.insertRecord(param);        
+        param.add(m.getTypesMeters().getId());
+        param.add(m.getNumber());
+        param.add(m.getYearProduce());              
+        if (dw.insertRecord(param) == 1) {
+            return dw.getIdentity();
+        }
+        return -1;
     }
     
-    public int update(Flow f) {     
+    public int update(Meter m) {     
         List<Object> param = new ArrayList<>();        
-        param.add(f.getDiameter());
-        param.add(f.getCapacity1());
-        param.add(f.getFlow1());
-        param.add(f.getCapacity2());
-        param.add(f.getFlow2());
-        param.add(f.getCapacity3());
-        param.add(f.getFlow3()); 
-        param.add(f.getId());
+        param.add(m.getTypesMeters().getId());
+        param.add(m.getNumber());
+        param.add(m.getYearProduce()); 
+        param.add(m.getId());
         return dw.updateRecord(param);        
     }
     
-    public int delete(Flow f) {
-        return dw.deleteRecord(f.getId());
+    public int delete(Meter m) {
+        return dw.deleteRecord(m.getId());
     }
 }

@@ -6,7 +6,7 @@ package ua.vynnyk.calibration.components;
 
 import java.math.BigDecimal;
 import java.util.List;
-import ua.vynnyk.calibration.entity.Calibration;
+import ua.vynnyk.calibration.model.entity.Calibration;
 
 /**
  *

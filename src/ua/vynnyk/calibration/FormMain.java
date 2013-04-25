@@ -30,8 +30,8 @@ import ua.vynnyk.calibration.components.CalibrationTableModel;
 import ua.vynnyk.calibration.components.treedates.Node;
 import ua.vynnyk.calibration.components.treedates.OpenDateInterface;
 import ua.vynnyk.calibration.components.treedates.TreeDates;
-import ua.vynnyk.calibration.database.CalibrationToData;
-import ua.vynnyk.calibration.entity.Calibration;
+import ua.vynnyk.calibration.model.data.CalibrationToData;
+import ua.vynnyk.calibration.model.entity.Calibration;
 
 /**
  *

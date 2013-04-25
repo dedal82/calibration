@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package ua.vynnyk.calibration.database;
+package ua.vynnyk.calibration.model.data;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,33 +11,33 @@ import java.util.List;
  *
  * @author vynnyk
  */
-public class QueryBuilder {
+class QueryBuilder {
     
     private String tableName;
     private List<String> fields;
   
-    public String getTableName() {
+    String getTableName() {
         return tableName;
     }
 
-    public void setTableName(String tableName) {
+    void setTableName(String tableName) {
         this.tableName = tableName;
     }
 
-    public List<String> getFields() {
+    List<String> getFields() {
         return fields;
     }
 
-    public void setFields(List<String> fields) {
+    void setFields(List<String> fields) {
         this.fields = fields;
     }
     
-    public QueryBuilder(String tableName, List<String> fields) {
+    QueryBuilder(String tableName, List<String> fields) {
         this.tableName = tableName;
         this.fields = fields;
     }
     
-    public String getSelectQuery() {
+    String getSelectQuery() {
         if (fields.isEmpty()) {
             return null;
         }            
@@ -49,7 +49,7 @@ public class QueryBuilder {
         return  query.toString();
     };
     
-    public String getInsertQuery() {
+    String getInsertQuery() {
         if (fields.size() < 2) {
             return null;
         }            
@@ -66,7 +66,7 @@ public class QueryBuilder {
         return  query.toString();
     };
     
-    public String getUpdateQuery() {
+    String getUpdateQuery() {
         if (fields.size() < 2) {
             return null;
         }            
@@ -81,7 +81,7 @@ public class QueryBuilder {
         return  query.toString();
     };
     
-    public String getDeleteQuery() {
+    String getDeleteQuery() {
         if (fields.isEmpty()) {
             return null;
         }            
@@ -105,12 +105,12 @@ public class QueryBuilder {
         return fieldList.toString();
     } 
     
-   public int getFieldCount() {
+   int getFieldCount() {
         return fields.size();
     } 
     
     // for testing
-    public static void main(String[] args) {
+    static void main(String[] args) {
         List<String> fields = new ArrayList<>();
         fields.add("id");
         fields.add("name");
@@ -124,7 +124,7 @@ public class QueryBuilder {
         System.out.println(queryBuilder.getDeleteQuery());
     }
 
-    public String getIdField() {
+    String getIdField() {
         return fields.get(0);
     }
     

@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package ua.vynnyk.calibration.database;
+package ua.vynnyk.calibration.model.data;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -11,15 +11,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import ua.vynnyk.calibration.entity.TypeMeters;
+import ua.vynnyk.calibration.model.entity.TypeMeters;
 
 /**
  *
  * @author vynnyk
  */
-public class TypeMetersToData {
+class TypeMetersToData implements DataInterface<TypeMeters> {
+    
     private static final String tableName;
     private static final List<String> fields = new ArrayList<>();
+    
     static {
         tableName = "types_meters";
         fields.add("id");               //0
@@ -28,15 +30,16 @@ public class TypeMetersToData {
         fields.add("cycle");            //3
         fields.add("precisions");       //4        
     }
+    
     private Connection con;
     private DataWorker dw;
 
-    public TypeMetersToData(Connection con) {
+    TypeMetersToData(Connection con) {
         this.con = con;
         this.dw = new DataWorker(new QueryBuilder(tableName, fields), con);
     }
     
-    // повертає один обєкт з поточного запису в резултсеті
+    // Returns one entity from current position in the result set or null in case of the exception 
     private TypeMeters sel(ResultSet rs) {      
         try {
             TypeMeters tm = new TypeMeters(rs.getInt(1),
@@ -51,9 +54,10 @@ public class TypeMetersToData {
         return null;       
     }
     
-    // повертає один обєкт з резултсету
+    @Override
     public TypeMeters select(int id) {
         ResultSet rs = dw.selectRecord(id);
+        
         try {
             if (rs != null && rs.next()) {           
                 return sel(rs);
@@ -66,9 +70,10 @@ public class TypeMetersToData {
         return null;
     }
     
-    // повертає сет обєктів з резултсету
+    @Override
     public List<TypeMeters> selects(String condition) {
         ResultSet rs = dw.selectRecords(condition);
+        
         if (rs != null) {
             List<TypeMeters> cs = new ArrayList<>();
             try {
@@ -84,8 +89,10 @@ public class TypeMetersToData {
         }
     }
     
+    @Override
     public int insert(TypeMeters tm) {
-        List<Object> param = new ArrayList<>();        
+        List<Object> param = new ArrayList<>();
+        
         param.add(tm.getName());
         param.add(tm.getDiameter());
         param.add(tm.getCycle());              
@@ -93,8 +100,10 @@ public class TypeMetersToData {
         return dw.insertRecord(param);        
     }
     
+    @Override
     public int update(TypeMeters tm) {     
-        List<Object> param = new ArrayList<>();        
+        List<Object> param = new ArrayList<>();
+        
         param.add(tm.getName());
         param.add(tm.getDiameter());
         param.add(tm.getCycle());              
@@ -103,6 +112,7 @@ public class TypeMetersToData {
         return dw.updateRecord(param);        
     }
     
+    @Override
     public int delete(TypeMeters tm) {
         return dw.deleteRecord(tm.getId());
     }
