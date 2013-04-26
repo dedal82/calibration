@@ -25,10 +25,6 @@ public class ModelImpl implements Model {
 
     public ModelImpl() {
     }
-
-    public ModelImpl(Connection con) {
-        this.con = con;
-    }
            
     @Override
     public Entity getEntityModel(Class c) {                                    

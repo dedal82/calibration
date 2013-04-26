@@ -9,6 +9,8 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -20,7 +22,6 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeSelectionModel;
-import ua.vynnyk.calibration.DB;
 import ua.vynnyk.calibration.components.CalibrationTableModel;
 import ua.vynnyk.calibration.components.treedates.Node;
 import ua.vynnyk.calibration.components.treedates.OpenDateInterface;
@@ -34,6 +35,7 @@ import ua.vynnyk.calibration.model.entity.Calibration;
  */
 public class FormMain extends JFrame implements View {    
     private Controler controler;
+    private Actions actions;
     
     private List<Calibration> calibrations;
     
@@ -58,7 +60,8 @@ public class FormMain extends JFrame implements View {
     
     public FormMain(Controler controler) {        
         this.controler = controler;        
-        calibrations = new ArrayList();         
+        calibrations = new ArrayList(); 
+        actions = new Actions(controler);
                
         initComponents();
     }         
@@ -67,15 +70,7 @@ public class FormMain extends JFrame implements View {
         
         setLookAndFeel();
         
-       //Actions
-       Action exitAction = new AbstractAction("Вихід") {{
-            putValue(SHORT_DESCRIPTION, "Завершення роботи програми");    
-            }
-            @Override
-            public void actionPerformed(ActionEvent ae) {                 
-                System.exit(0);
-            }
-        };
+       //Actions       
        
        Action addCalibrationAction = new AbstractAction("Добавити") {{
             putValue(SHORT_DESCRIPTION, "Внесення інформації про повірку");    
@@ -107,7 +102,7 @@ public class FormMain extends JFrame implements View {
        menuCalibration.add(new JMenuItem("Видалити"));
        menuCalibration.add(new JMenuItem("Оновити"));
        menuCalibration.addSeparator();
-       menuCalibration.add(exitAction);
+       menuCalibration.add(actions.getAction(Act.EXIT));
        
        menuBar = new JMenuBar();
        menuBar.add(menuCalibration);
@@ -183,7 +178,8 @@ public class FormMain extends JFrame implements View {
        //панель статусу
        
        //головна форма
-       setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+       addWindowListener(new WinListener());
+       
        setPreferredSize(new Dimension(1024, 750));       
        setJMenuBar(menuBar);
        add(splitPane, BorderLayout.CENTER);
@@ -218,5 +214,13 @@ public class FormMain extends JFrame implements View {
     private void refreshData(Date date) {        
         calibrations = controler.getCalibrations(date); 
     }
-              
+    
+    private class WinListener extends WindowAdapter {
+
+        @Override
+        public void windowClosing(WindowEvent we) {
+            controler.exit();
+        }
+           
+    }              
 }

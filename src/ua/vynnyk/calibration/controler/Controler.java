@@ -4,6 +4,7 @@
  */
 package ua.vynnyk.calibration.controler;
 
+import java.sql.Connection;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -22,14 +23,18 @@ import ua.vynnyk.calibration.view.View;
 public class Controler {
     private Model model;
     private View view;
-            
+                
     private Entity<Calibration> eCalibration;
     private Entity<Meter> eMeter;
     private Entity<TypeMeters> eTypeMeters;
     private Entity<Flow> eFlow;
 
     public Controler(Model model) {
-        this.model = model;        
+        this.model = model; 
+        
+        Connection con = DB.openConnection();
+        model.setConnection(con);
+        
         eCalibration = model.getEntityModel(Calibration.class);
         eMeter = model.getEntityModel(Meter.class);
         eTypeMeters = model.getEntityModel(TypeMeters.class);
@@ -44,10 +49,15 @@ public class Controler {
         this.view = view;
     }
     
-    
-
     public List<Calibration> getCalibrations(Date date) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         return eCalibration.selects("where dates = \'" + sdf.format(date) + "\'");
     }
+        
+    public void exit() {
+        DB.closeConnection();
+        System.exit(0);
+    }
+    
+    
 }

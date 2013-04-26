@@ -4,11 +4,10 @@
  */
 package ua.vynnyk.calibration;
 
-import ua.vynnyk.calibration.view.FormMain;
-import java.sql.Connection;
 import ua.vynnyk.calibration.controler.Controler;
 import ua.vynnyk.calibration.model.data.Model;
 import ua.vynnyk.calibration.model.data.ModelImpl;
+import ua.vynnyk.calibration.view.FormMain;
 import ua.vynnyk.calibration.view.View;
 
 /**
@@ -17,10 +16,7 @@ import ua.vynnyk.calibration.view.View;
  */
 public class Main {
     public static void main(String[] args) {
-        
-        final Connection con = DB.openConnection();
-        
-        final Model model = new ModelImpl(con);
+        final Model model = new ModelImpl();
         final Controler controler = new Controler(model);
         final View view = new FormMain(controler);
         
@@ -31,9 +27,7 @@ public class Main {
             public void run() {
                 ((FormMain) view).setVisible(true);
             }
-        });
-        How wait to EDT to close connection
-        DB.closeConnection(con);    
+        });          
     }    
 }
 
