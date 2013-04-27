@@ -35,7 +35,7 @@ public class NodeRoot extends Node {
             for (Date date: listDate) {                
                 add(new NodeYear(date));            
             }
-        }
+        }         
     }
     
     private List<Date> getChildDates() {        

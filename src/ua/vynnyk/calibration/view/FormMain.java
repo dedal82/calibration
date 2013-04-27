@@ -6,9 +6,7 @@ package ua.vynnyk.calibration.view;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
@@ -16,12 +14,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import javax.swing.*;
-import static javax.swing.Action.SHORT_DESCRIPTION;
 import javax.swing.border.EtchedBorder;
-import javax.swing.event.TreeSelectionEvent;
-import javax.swing.event.TreeSelectionListener;
-import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreeSelectionModel;
+import javax.swing.table.AbstractTableModel;
 import ua.vynnyk.calibration.components.CalibrationTableModel;
 import ua.vynnyk.calibration.components.treedates.Node;
 import ua.vynnyk.calibration.components.treedates.OpenDateInterface;
@@ -37,7 +31,8 @@ public class FormMain extends JFrame implements View {
     private Controler controler;
     private Actions actions;
     
-    private List<Calibration> calibrations;
+    private final List<Calibration> calibrations;
+    private AbstractTableModel tableModel;
     
     private Dimension btnDimension;
     private JMenuBar menuBar;
@@ -66,28 +61,6 @@ public class FormMain extends JFrame implements View {
         
         setLookAndFeel();
         
-       //Actions       
-       
-       Action addCalibrationAction = new AbstractAction("Добавити") {{
-            putValue(SHORT_DESCRIPTION, "Внесення інформації про повірку");    
-            }
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                new FormCalibration(FormMain.this, "Повірка", true).setVisible(true);
-            }
-        };
-       
-       Action refreshAction = new AbstractAction("Оновити") {{
-            putValue(SHORT_DESCRIPTION, "Оновлення інформації з бази даних");    
-            }
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                ((Node) tree.getLastSelectedPathComponent()).open();
-            }
-        };
-       
-       //Actions
-       
        //меню 
        menuCalibration = new JMenu("Повірка");
        menuReport = new JMenu("Звіти");
@@ -125,20 +98,12 @@ public class FormMain extends JFrame implements View {
                 refreshData(date);
             }
         });
-       
-       tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
-       ((Node) tree.getModel().getRoot()).open();
-       ((DefaultTreeModel) tree.getModel()).reload();
-       tree.addTreeSelectionListener(new TreeSelectionListener() {
-            @Override
-            public void valueChanged(TreeSelectionEvent tse) {
-                treeDatesValueChanged(tse);    
-            }            
-        });              
+                                  
        scrollTree = new JScrollPane(tree);             
        
        //грід
-       table = new JTable(new CalibrationTableModel(calibrations));
+       tableModel = new CalibrationTableModel(calibrations);
+       table = new JTable(tableModel);
        scrollTable = new JScrollPane(table);
        table.setFillsViewportHeight(true);
        table.setAutoCreateRowSorter(true);
@@ -177,16 +142,19 @@ public class FormMain extends JFrame implements View {
        setLocationRelativeTo(null);
     }
     
-    private void treeDatesValueChanged(TreeSelectionEvent tse) {
-        Node node = (Node) tree.getLastSelectedPathComponent();
-        if (node == null) {
-            return;
-        }
-        node.open(); 
+            
+    private void refreshData(Date date) {     
+        calibrations.clear();
+        calibrations.addAll(controler.getCalibrations(date)); 
+        tableModel.fireTableDataChanged();
     }
-                  
-    private void refreshData(Date date) {        
-        calibrations = controler.getCalibrations(date); 
+
+    @Override
+    public void refreshData() { 
+        final Node node = (Node) tree.getLastSelectedPathComponent();
+        if (node != null) {
+            node.open();
+        }        
     }
     
     private class WinListener extends WindowAdapter {

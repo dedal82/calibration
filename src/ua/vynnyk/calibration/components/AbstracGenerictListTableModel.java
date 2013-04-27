@@ -16,7 +16,7 @@ public abstract class AbstracGenerictListTableModel<T> extends AbstractTableMode
     private String[] titles;
     protected List<T> dataList;
     
-    public AbstracGenerictListTableModel(String[] titles, List<T> dataList) {
+    public AbstracGenerictListTableModel(String[] titles, List<T> dataList) {        
         this.titles = titles;
         this.dataList = dataList;
     }
@@ -33,6 +33,6 @@ public abstract class AbstracGenerictListTableModel<T> extends AbstractTableMode
 
     @Override
     public String getColumnName(int i) {
-        return titles[i];
+        return titles[i];        
     }    
 }

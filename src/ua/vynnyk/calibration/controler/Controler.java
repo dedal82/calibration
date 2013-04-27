@@ -4,16 +4,23 @@
  */
 package ua.vynnyk.calibration.controler;
 
+import java.awt.event.ActionEvent;
 import java.sql.Connection;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import static javax.swing.Action.SHORT_DESCRIPTION;
+import ua.vynnyk.calibration.components.treedates.Node;
 import ua.vynnyk.calibration.model.data.Entity;
 import ua.vynnyk.calibration.model.data.Model;
 import ua.vynnyk.calibration.model.entity.Calibration;
 import ua.vynnyk.calibration.model.entity.Flow;
 import ua.vynnyk.calibration.model.entity.Meter;
 import ua.vynnyk.calibration.model.entity.TypeMeters;
+import ua.vynnyk.calibration.view.FormCalibration;
+import ua.vynnyk.calibration.view.FormMain;
 import ua.vynnyk.calibration.view.View;
 
 /**
@@ -59,5 +66,12 @@ public class Controler {
         System.exit(0);
     }
     
+    public void addCalibration() {
+        new FormCalibration(null , "Повірка", true).setVisible(true);
+    }
     
+    public void refreshData() {
+        view.refreshData();
+    }
+                    
 }

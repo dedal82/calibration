@@ -5,14 +5,10 @@
 package ua.vynnyk.calibration.view;
 
 import java.awt.event.ActionEvent;
-import java.io.IOException;
 import java.net.URL;
 import java.util.EnumMap;
 import java.util.MissingResourceException;
-import java.util.Properties;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import static javax.swing.Action.ACCELERATOR_KEY;
@@ -122,7 +118,7 @@ class Actions {
                 
         @Override
         public void actionPerformed(ActionEvent ae) {
-            controler.exit();                    
+            controler.refreshData();                    
         }        
     }
     

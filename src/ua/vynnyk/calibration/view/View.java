@@ -9,5 +9,7 @@ package ua.vynnyk.calibration.view;
  * @author Admin
  */
 public interface View {
+
+    public void refreshData();
     
 }
