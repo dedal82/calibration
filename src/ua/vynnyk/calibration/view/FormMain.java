@@ -47,10 +47,6 @@ public class FormMain extends JFrame implements View {
     private JTree tree;
     private JScrollPane scrollTable;
     private JTable table;
-    private JPanel buttonPanel;
-    private JButton addButton;
-    private JButton updButton;
-    private JButton delButton;
     private JPanel statusPanel;
     private JLabel status1;
     private JLabel status2;
@@ -97,10 +93,10 @@ public class FormMain extends JFrame implements View {
        menuReport = new JMenu("Звіти");
        menuHelp = new JMenu("Допомога");
        
-       menuCalibration.add(new JMenuItem(addCalibrationAction));
-       menuCalibration.add(new JMenuItem("Змінити"));
-       menuCalibration.add(new JMenuItem("Видалити"));
-       menuCalibration.add(new JMenuItem("Оновити"));
+       menuCalibration.add(actions.getAction(Act.ADD_CALIBRATION));
+       menuCalibration.add(actions.getAction(Act.EDIT_CALIBRATION));
+       menuCalibration.add(actions.getAction(Act.DELETE_CALIBRATION));
+       menuCalibration.add(actions.getAction(Act.REFRESH));
        menuCalibration.addSeparator();
        menuCalibration.add(actions.getAction(Act.EXIT));
        
@@ -112,6 +108,10 @@ public class FormMain extends JFrame implements View {
        
        //toolbar
        toolBar = new JToolBar();
+       toolBar.add(new JButton(actions.getAction(Act.ADD_CALIBRATION)));
+       toolBar.add(new JButton(actions.getAction(Act.EDIT_CALIBRATION)));
+       toolBar.add(new JButton(actions.getAction(Act.DELETE_CALIBRATION)));
+       toolBar.add(new JButton(actions.getAction(Act.REFRESH)));
        toolBar.add(new JButton(actions.getAction(Act.EXIT)));
        //toolbar              
                       
@@ -150,24 +150,6 @@ public class FormMain extends JFrame implements View {
        splitPane.setRightComponent(scrollTable);       
        //дерево і грід
        
-       // панель кнопок
-       btnDimension = new Dimension(95, 28);
-       addButton = new JButton(addCalibrationAction);
-       addButton.setPreferredSize(btnDimension);
-       updButton = new JButton("Змінити");
-       updButton.setPreferredSize(btnDimension);
-       delButton = new JButton("Видалити");               
-       delButton.setPreferredSize(btnDimension);
-       buttonPanel = new JPanel();       
-       buttonPanel.setPreferredSize(new Dimension(103,0));
-       buttonPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
-              
-       buttonPanel.add(addButton);
-       buttonPanel.add(updButton);
-       buttonPanel.add(delButton);
-       
-       // панель кнопок
-       
        //панель статусу
        status1 = new JLabel("Status 1");
        status1.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
@@ -189,7 +171,6 @@ public class FormMain extends JFrame implements View {
        setJMenuBar(menuBar);        
        add(toolBar, BorderLayout.NORTH);
        add(splitPane, BorderLayout.CENTER);
-       add(buttonPanel, BorderLayout.EAST);
        add(statusPanel, BorderLayout.SOUTH);
        //
        pack();

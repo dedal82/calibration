@@ -23,7 +23,7 @@ public class TH {
         setResources(currentLocale);
     }
     
-    public static String getStr(String resource) {
+    public static String getString(String resource) {
         try { 
             return resources.getString(resource);
         } catch (Exception e) {
@@ -35,10 +35,10 @@ public class TH {
         resources = ResourceBundle.getBundle(FILE_NAME, locale);
         currentLocale = locale;
         
-        UIManager.put("OptionPane.cancelButtonText", getStr("option.cancel"));
-        UIManager.put("OptionPane.noButtonText", getStr("option.no"));
-        UIManager.put("OptionPane.okButtonText", getStr("option.ok"));
-        UIManager.put("OptionPane.yesButtonText", getStr("option.yes"));
+        UIManager.put("OptionPane.cancelButtonText", getString("option.cancel"));
+        UIManager.put("OptionPane.noButtonText", getString("option.no"));
+        UIManager.put("OptionPane.okButtonText", getString("option.ok"));
+        UIManager.put("OptionPane.yesButtonText", getString("option.yes"));
     }
     
     //not implemented yet. get list localization file in package

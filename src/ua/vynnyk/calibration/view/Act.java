@@ -9,5 +9,9 @@ package ua.vynnyk.calibration.view;
  * @author vynnyk
  */
 enum Act {
-    EXIT
+    EXIT,
+    ADD_CALIBRATION,
+    EDIT_CALIBRATION,
+    DELETE_CALIBRATION,
+    REFRESH
 }

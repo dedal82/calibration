@@ -5,7 +5,13 @@
 package ua.vynnyk.calibration.view;
 
 import java.awt.event.ActionEvent;
+import java.io.IOException;
+import java.net.URL;
 import java.util.EnumMap;
+import java.util.Properties;
+import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import static javax.swing.Action.ACCELERATOR_KEY;
@@ -25,38 +31,44 @@ import ua.vynnyk.translations.TH;
  * @author vynnyk
  */
 class Actions {
-    private final Class ICONS = Icons.class;    
-    private final String EXT = ".png";
-    private final String BIG_EXT = "_big.png";
-    private final String ACT_NAME = ".action.name";
-    private final String ACT_SHORT_DESCRIPTION = ".action.sd";    
+    private static final Class ICONS = Icons.class;    
+    private static final String EXT = ".png";
+    private static final String BIG_EXT = "_big.png";
+    private static final String ACT_NAME = ".action.name";
+    private static final String ACT_SHORT_DESCRIPTION = ".action.sd"; 
+    private static final String KEY_STROKE = "ua.vynnyk.calibration.view.KeyStroke";
+    
+    private ResourceBundle keyStroke;
     private Controler controler;
     private EnumMap<Act, Action> actionSet;
 
     public Actions(Controler controler) {
         this.controler = controler;
         actionSet = new EnumMap(Act.class);
-        
-        createActions();
+                
+        createActions();                
     }
 
     public Action getAction(Act act) {
         return actionSet.get(act);
+    }   
+
+    private void createActions() { 
+        keyStroke = ResourceBundle.getBundle(KEY_STROKE);
+        
+        new ExitAction();
+        new AddCalibrationAction();
+        new EditCalibrationAction();
+        new DeleteCalibrationAction();
+        new RefreshAction();
+        
+        keyStroke = null;
     }
 
-    private void setAction(Act act, Action action) {
-        actionSet.put(act, action);
-    }
+    class ExitAction extends AbstractAction {
 
-    private void createActions() {     
-        setAction(Act.EXIT, new ExitAction());
-    }
-
-    private class ExitAction extends AbstractAction {
-
-        public ExitAction() {
-            configureAction(Act.EXIT, this);
-            putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke("control Q"));            
+        public ExitAction() {            
+            configureAction(Act.EXIT, this);                       
         }
                 
         @Override
@@ -65,19 +77,79 @@ class Actions {
         }        
     } 
     
+    private class AddCalibrationAction extends AbstractAction {
+
+        public AddCalibrationAction() {            
+            configureAction(Act.ADD_CALIBRATION, this);                       
+        }
+                
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            controler.exit();                    
+        }        
+    }
+    
+    private class EditCalibrationAction extends AbstractAction {
+
+        public EditCalibrationAction() {            
+            configureAction(Act.EDIT_CALIBRATION, this);                       
+        }
+                
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            controler.exit();                    
+        }        
+    }
+    
+    private class DeleteCalibrationAction extends AbstractAction {
+
+        public DeleteCalibrationAction() {            
+            configureAction(Act.DELETE_CALIBRATION, this);                        
+        }
+                
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            controler.exit();                    
+        }        
+    }
+    
+    private class RefreshAction extends AbstractAction {
+
+        public RefreshAction() {            
+            configureAction(Act.REFRESH, this);                        
+        }
+                
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            controler.exit();                    
+        }        
+    }
+    
     private void configureAction(Act act, Action action) {
         final String command = act.name().toLowerCase();
         final String iconFile = command + EXT;
         final String iconBigFile = command + BIG_EXT;
-        final ImageIcon smallIcon = new ImageIcon(ICONS.getResource(iconFile));
-        final ImageIcon largeIcon = new ImageIcon(ICONS.getResource(iconBigFile));
-        action.putValue(NAME, TH.getStr(command + ACT_NAME));
-        action.putValue(SHORT_DESCRIPTION, TH.getStr(command + ACT_SHORT_DESCRIPTION));            
-        //will be replased to store hot keys into configure file
-        //action.putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke("control Q"));
+        final ImageIcon smallIcon = new ImageIcon(getIcon(iconFile));
+        final ImageIcon largeIcon = new ImageIcon(getIcon(iconBigFile));
+        action.putValue(NAME, getRes(command + ACT_NAME));
+        action.putValue(SHORT_DESCRIPTION, getRes(command + ACT_SHORT_DESCRIPTION));                    
+        action.putValue(ACCELERATOR_KEY, getKeyStroke(command));            
         action.putValue(ACTION_COMMAND_KEY, command);
         action.putValue(SMALL_ICON, smallIcon);
         action.putValue(LARGE_ICON_KEY, largeIcon);
+        
+        actionSet.put(act, action);
     }
     
+    private URL getIcon(String file) {
+        return ICONS.getResource(file);
+    }
+    
+    private KeyStroke getKeyStroke(String command) {
+        return KeyStroke.getKeyStroke(keyStroke.getString(command));
+    }
+    
+    private String getRes(String key) {
+        return TH.getString(key);
+    }
 }
