@@ -92,7 +92,7 @@ public class FormMain extends JFrame implements View {
        
        //Actions
        
-        //меню 
+       //меню 
        menuCalibration = new JMenu("Повірка");
        menuReport = new JMenu("Звіти");
        menuHelp = new JMenu("Допомога");
@@ -109,7 +109,12 @@ public class FormMain extends JFrame implements View {
        menuBar.add(menuReport);
        menuBar.add(menuHelp);
        //меню
-        
+       
+       //toolbar
+       toolBar = new JToolBar();
+       toolBar.add(new JButton(actions.getAction(Act.EXIT)));
+       //toolbar              
+                      
        // дерево 
        Calendar tmpDate = Calendar.getInstance();
        tmpDate.set(2012, 0, 1); 
@@ -181,7 +186,8 @@ public class FormMain extends JFrame implements View {
        addWindowListener(new WinListener());
        
        setPreferredSize(new Dimension(1024, 750));       
-       setJMenuBar(menuBar);
+       setJMenuBar(menuBar);        
+       add(toolBar, BorderLayout.NORTH);
        add(splitPane, BorderLayout.CENTER);
        add(buttonPanel, BorderLayout.EAST);
        add(statusPanel, BorderLayout.SOUTH);
@@ -197,20 +203,7 @@ public class FormMain extends JFrame implements View {
         }
         node.open(); 
     }
-        
-    private static void setLookAndFeel() {
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(FormMain.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-    }  
-    
+                  
     private void refreshData(Date date) {        
         calibrations = controler.getCalibrations(date); 
     }
@@ -222,5 +215,18 @@ public class FormMain extends JFrame implements View {
             controler.exit();
         }
            
-    }              
+    }   
+    
+    private static void setLookAndFeel() {
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(FormMain.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+    }
 }
