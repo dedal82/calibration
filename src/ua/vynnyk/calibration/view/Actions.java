@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.net.URL;
 import java.util.EnumMap;
+import java.util.MissingResourceException;
 import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -146,7 +147,11 @@ class Actions {
     }
     
     private KeyStroke getKeyStroke(String command) {
-        return KeyStroke.getKeyStroke(keyStroke.getString(command));
+        try {
+            return KeyStroke.getKeyStroke(keyStroke.getString(command));
+        } catch (MissingResourceException e) {
+           return null;  
+        }              
     }
     
     private String getRes(String key) {

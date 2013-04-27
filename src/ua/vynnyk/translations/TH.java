@@ -5,6 +5,7 @@
 package ua.vynnyk.translations;
 
 import java.util.Locale;
+import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import javax.swing.UIManager;
 
@@ -26,7 +27,7 @@ public class TH {
     public static String getString(String resource) {
         try { 
             return resources.getString(resource);
-        } catch (Exception e) {
+        } catch (MissingResourceException e) {
             return "No translation";
         }            
     }
