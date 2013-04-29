@@ -5,18 +5,19 @@
 package ua.vynnyk.calibration.view;
 
 import java.awt.event.ActionEvent;
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.EnumMap;
 import java.util.MissingResourceException;
-import java.util.ResourceBundle;
+import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-import static javax.swing.Action.ACCELERATOR_KEY;
-import static javax.swing.Action.ACTION_COMMAND_KEY;
-import static javax.swing.Action.LARGE_ICON_KEY;
-import static javax.swing.Action.NAME;
-import static javax.swing.Action.SHORT_DESCRIPTION;
-import static javax.swing.Action.SMALL_ICON;
+import static javax.swing.Action.*;
 import javax.swing.ImageIcon;
 import javax.swing.KeyStroke;
 import ua.vynnyk.calibration.controler.Controler;
@@ -33,9 +34,9 @@ class Actions {
     private static final String BIG_EXT = "_big.png";
     private static final String ACT_NAME = ".action.name";
     private static final String ACT_SHORT_DESCRIPTION = ".action.sd"; 
-    private static final String KEY_STROKE = "ua.vynnyk.calibration.view.KeyStroke";
+    private static final String KEY_STROKE = "KeyStroke.properties";
     
-    private ResourceBundle keyStroke;
+    private Properties keyStrokes;
     private Controler controler;
     private EnumMap<Act, Action> actionSet;
 
@@ -51,74 +52,36 @@ class Actions {
     }   
 
     private void createActions() { 
-        keyStroke = ResourceBundle.getBundle(KEY_STROKE);
+        keyStrokes = getKeyStrokes();
         
-        new ExitAction();
-        new AddCalibrationAction();
-        new EditCalibrationAction();
-        new DeleteCalibrationAction();
-        new RefreshAction();
+        for (Act act : Act.values()) {
+            String methodName = act.getMethodName();
+            Action action = new RefAction(methodName);
+            configureAction(act, action);
+        }
+                        
+        keyStrokes = null;
+    }
         
-        keyStroke = null;
-    }
+    private class RefAction extends AbstractAction {
+        private Method method;
 
-    class ExitAction extends AbstractAction {
-
-        public ExitAction() {            
-            configureAction(Act.EXIT, this);                       
+        public RefAction(String methodName) {
+            try {    
+                Class c = controler.getClass();
+                this.method = c.getMethod(methodName);
+            } catch (NoSuchMethodException | SecurityException ex) {
+                Logger.getLogger(Actions.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
-                
+                               
         @Override
         public void actionPerformed(ActionEvent ae) {
-            controler.exit();                    
-        }        
-    } 
-    
-    private class AddCalibrationAction extends AbstractAction {
-
-        public AddCalibrationAction() {            
-            configureAction(Act.ADD_CALIBRATION, this);                       
-        }
-                
-        @Override
-        public void actionPerformed(ActionEvent ae) {
-            controler.exit();                    
-        }        
-    }
-    
-    private class EditCalibrationAction extends AbstractAction {
-
-        public EditCalibrationAction() {            
-            configureAction(Act.EDIT_CALIBRATION, this);                       
-        }
-                
-        @Override
-        public void actionPerformed(ActionEvent ae) {
-            controler.exit();                    
-        }        
-    }
-    
-    private class DeleteCalibrationAction extends AbstractAction {
-
-        public DeleteCalibrationAction() {            
-            configureAction(Act.DELETE_CALIBRATION, this);                        
-        }
-                
-        @Override
-        public void actionPerformed(ActionEvent ae) {
-            controler.exit();                    
-        }        
-    }
-    
-    private class RefreshAction extends AbstractAction {
-
-        public RefreshAction() {            
-            configureAction(Act.REFRESH, this);                        
-        }
-                
-        @Override
-        public void actionPerformed(ActionEvent ae) {
-            controler.refreshData();                    
+            try {
+                method.invoke(controler);
+            } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+                Logger.getLogger(Actions.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }        
     }
     
@@ -126,27 +89,49 @@ class Actions {
         final String command = act.name().toLowerCase();
         final String iconFile = command + EXT;
         final String iconBigFile = command + BIG_EXT;
-        final ImageIcon smallIcon = new ImageIcon(getIcon(iconFile));
-        final ImageIcon largeIcon = new ImageIcon(getIcon(iconBigFile));
+                
         action.putValue(NAME, getRes(command + ACT_NAME));
         action.putValue(SHORT_DESCRIPTION, getRes(command + ACT_SHORT_DESCRIPTION));                    
         action.putValue(ACCELERATOR_KEY, getKeyStroke(command));            
         action.putValue(ACTION_COMMAND_KEY, command);
-        action.putValue(SMALL_ICON, smallIcon);
-        action.putValue(LARGE_ICON_KEY, largeIcon);
+        
+        ImageIcon icon = getIcon(iconFile);
+        if (icon != null) {            
+            action.putValue(SMALL_ICON, icon);
+        }
+        
+        icon = getIcon(iconBigFile);
+        if (icon != null) { 
+            action.putValue(LARGE_ICON_KEY, icon);
+        }    
         
         actionSet.put(act, action);
     }
     
-    private URL getIcon(String file) {
-        return ICONS.getResource(file);
+    private Properties getKeyStrokes() {
+        Properties keys = new Properties();
+        
+        try {
+            InputStream in = Actions.class.getResourceAsStream(KEY_STROKE);
+            keys.load(in);
+        } catch (IOException ex) {
+            Logger.getLogger(Actions.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return keys;
+    }
+    
+    private ImageIcon getIcon(String file) {
+        URL iconURL = ICONS.getResource(file);
+        
+        return iconURL != null ? new ImageIcon(iconURL) : null;        
     }
     
     private KeyStroke getKeyStroke(String command) {
         try {
-            return KeyStroke.getKeyStroke(keyStroke.getString(command));
+            String key = keyStrokes.getProperty(command);
+            return KeyStroke.getKeyStroke(key);
         } catch (MissingResourceException e) {
-           return null;  
+            return null;  
         }              
     }
     

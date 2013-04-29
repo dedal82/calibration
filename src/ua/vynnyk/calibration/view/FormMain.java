@@ -34,7 +34,6 @@ public class FormMain extends JFrame implements View {
     private final List<Calibration> calibrations;
     private AbstractTableModel tableModel;
     
-    private Dimension btnDimension;
     private JMenuBar menuBar;
     private JToolBar toolBar;
     private JSplitPane splitPane;

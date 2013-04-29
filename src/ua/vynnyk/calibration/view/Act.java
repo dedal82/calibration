@@ -9,9 +9,19 @@ package ua.vynnyk.calibration.view;
  * @author vynnyk
  */
 enum Act {
-    EXIT,
-    ADD_CALIBRATION,
-    EDIT_CALIBRATION,
-    DELETE_CALIBRATION,
-    REFRESH
+    EXIT("exit"),
+    ADD_CALIBRATION("exit"),
+    EDIT_CALIBRATION("exit"),
+    DELETE_CALIBRATION("exit"),
+    REFRESH("refreshData");
+    
+    private String methodName;
+    
+    Act(String methodName) {
+        this.methodName = methodName;
+    }
+
+    String getMethodName() {
+        return methodName;
+    }        
 }
