@@ -13,8 +13,6 @@ import java.util.Date;
  */
 public class NodeDate extends Node {
     
-    private OpenDateInterface openDate;
-    
     public NodeDate(Date date) {
         super(date);
     }
