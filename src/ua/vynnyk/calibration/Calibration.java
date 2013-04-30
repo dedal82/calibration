@@ -14,7 +14,7 @@ import ua.vynnyk.calibration.view.View;
  *
  * @author Admin
  */
-public class Main {
+public class Calibration {
     public static void main(String[] args) {
         final Model model = new ModelImpl();
         final Controler controler = new Controler(model);
