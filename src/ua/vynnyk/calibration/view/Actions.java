@@ -22,7 +22,7 @@ import javax.swing.ImageIcon;
 import javax.swing.KeyStroke;
 import ua.vynnyk.calibration.controler.Controler;
 import ua.vynnyk.calibration.view.icons.Icons;
-import ua.vynnyk.translations.TH;
+import ua.vynnyk.l10n.TH;
 
 /**
  *
