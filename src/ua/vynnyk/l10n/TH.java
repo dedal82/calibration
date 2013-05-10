@@ -14,7 +14,7 @@ import javax.swing.UIManager;
  * @author vynnyk
  */
 public class TH {
-    private static final String FILE_NAME = "ua.vynnyk.translations.translate";
+    private static final String FILE_NAME = "ua.vynnyk.l10n.translate";
     private static final Locale [] locales = {new Locale("uk", "UA")};  
     
     private static Locale currentLocale = new Locale("uk", "UA");    
