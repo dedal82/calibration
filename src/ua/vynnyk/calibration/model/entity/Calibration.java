@@ -17,7 +17,7 @@ public final class Calibration {
                                                   "ДСТУ пломба"};
     
      private int id;
-     private Meter meters;
+     private Meter meter;
      private Date dates;
      private BigDecimal error0;
      private BigDecimal error1;
@@ -29,20 +29,20 @@ public final class Calibration {
      private String dstuSeal;
 
     public Calibration() {
-        this.meters = new Meter();
+        this.meter = new Meter();
     }
 	
     public Calibration(int id, Meter meters, Date dates) {
         this.id = id;
-        this.meters = meters;
+        this.meter = meters;
         this.dates = dates;
     }
     
-    public Calibration(int id, Meter meters, Date dates, 
+    public Calibration(int id, Meter meter, Date dates, 
                        BigDecimal error0, BigDecimal error1, BigDecimal error2, BigDecimal error3, 
                        BigDecimal meterageSt, BigDecimal meterageEnd, int dstuNumber, String dstuSeal) {
        this.id = id;
-       this.meters = meters;
+       this.meter = meter;
        this.dates = dates;
        this.error0 = error0;
        this.error1 = error1;
@@ -61,12 +61,12 @@ public final class Calibration {
     public void setId(int id) {
         this.id = id;
     }
-    public Meter getMeters() {
-        return this.meters;
+    public Meter getMeter() {
+        return this.meter;
     }
     
-    public void setMeters(Meter meters) {
-        this.meters = meters;
+    public void setMeter(Meter meter) {
+        this.meter = meter;
     }
     public Date getDates() {
         return this.dates;

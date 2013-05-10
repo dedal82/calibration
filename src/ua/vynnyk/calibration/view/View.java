@@ -13,5 +13,7 @@ public interface View {
     public void refreshData();
 
     public void addCalibration();
+
+    public void editCalibration();
     
 }

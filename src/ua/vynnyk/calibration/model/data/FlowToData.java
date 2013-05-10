@@ -42,7 +42,7 @@ class FlowToData implements FlowDao {
     }
     
     // повертає один обєкт з поточного запису в резултсеті
-    private Flow sel(ResultSet rs) {      
+    private Flow convertRow(ResultSet rs) {      
         try {
                 Flow f = new Flow(rs.getInt(1),
                               rs.getInt(2),  
@@ -65,7 +65,7 @@ class FlowToData implements FlowDao {
         ResultSet rs = dw.selectRecord(id);
         try {
             if (rs != null && rs.next()) {           
-                return sel(rs);
+                return convertRow(rs);
             } else {
                 return null;
             }
@@ -83,7 +83,7 @@ class FlowToData implements FlowDao {
             List<Flow> cs = new ArrayList<>();
             try {
                 while (rs.next()) {
-                    cs.add(sel(rs));                    
+                    cs.add(convertRow(rs));                    
                 }
             } catch (SQLException ex) {
                 Logger.getLogger(CalibrationToData.class.getName()).log(Level.SEVERE, null, ex);

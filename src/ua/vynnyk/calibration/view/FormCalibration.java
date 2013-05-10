@@ -65,7 +65,10 @@ public class FormCalibration extends JDialog {
         this.frame = frame; 
         this.controler = controler;
         this.calibration = c;
+        
         initComponents();
+        
+        setCalibration(c);
     }
 
     private void initComponents() {
@@ -156,39 +159,31 @@ public class FormCalibration extends JDialog {
         Focus.setFocusNexComponentKey(panel);
         
     } 
+    
+    private String getRes(String key) {
+        return TH.getString(key);
+    }
 
     private void addListeners() {
         addButton.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent ae) {
-                TypeMeters tm = (TypeMeters) typesComboBox.getSelectedItem();                
-                Meter m = new Meter(0, tm, meterField.getText(), Integer.parseInt(yearField.getText()));
+            public void actionPerformed(ActionEvent ae) {               
+                Calibration c = getCalibration();
+                Meter m = c.getMeter();
+                
                 m.setId(controler.addMeter(m));
+                c.setId(controler.addCalibration(c)); 
                 
-                Calibration c = new Calibration();
-                c.setDates(new Date());
-                c.setMeters(m);
-                c.setError0(new BigDecimal(error0Field.getText()));
-                c.setError1(new BigDecimal(error1Field.getText()));
-                c.setError2(new BigDecimal(error2Field.getText()));
-                c.setError3(new BigDecimal(error3Field.getText()));
-                c.setMeterageSt(new BigDecimal(meterageStField.getText()));
-                c.setMeterageEnd(new BigDecimal(meterageEndField.getText()));
-                c.setDstuNumber(Integer.parseInt(numberDSTUField.getText()));
-                c.setDstuSeal(sealDSTUField.getText());
-                
-                int id = controler.addCalibration(c); 
-                if (id < 0) {
-                    c.setId(id);
+                if (c.getId() > 0) { 
                     calibration = c;
+                    controler.refreshData();                                                       
                 } else {
-                    JOptionPane.showMessageDialog(FormCalibration.this, TH.getString("error.addcalibration"), 
-                                                  TH.getString("error"), JOptionPane.ERROR_MESSAGE);
-                }
-            }
+                    JOptionPane.showMessageDialog(FormCalibration.this, getRes("error.addcalibration"), 
+                                                  getRes("error"), JOptionPane.ERROR_MESSAGE);
+                }   
+            }           
         });
-        
-        
+                
         closeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -196,5 +191,56 @@ public class FormCalibration extends JDialog {
                 dispose();
             }
         });
+    }
+
+    private void setCalibration(Calibration c) {
+        final Meter m = c.getMeter();
+        meterField.setText(m.getNumber());
+        typesComboBox.setSelectedItem(m.getTypesMeters());
+        yearField.setText(Integer.toString(m.getYearProduce()));
+        error0Field.setText(c.getError0().toString());
+        error1Field.setText(c.getError1().toString());
+        error2Field.setText(c.getError2().toString());
+        error3Field.setText(c.getError3().toString());
+        meterageStField.setText(c.getMeterageSt().toString());
+        meterageEndField.setText(c.getMeterageEnd().toString());
+        sealDSTUField.setText(c.getDstuSeal());
+        numberDSTUField.setText(Integer.toString(c.getDstuNumber()));
+    }
+    
+    private Meter getMeter() {
+        Meter m = new Meter();
+        try {
+            TypeMeters tm = (TypeMeters) typesComboBox.getSelectedItem();                
+            m.setTypesMeters(tm);
+            m.setNumber(meterField.getText());
+            m.setYearProduce(Integer.parseInt(yearField.getText())); 
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(FormCalibration.this, e.toString(), 
+                                          getRes("error"), JOptionPane.ERROR_MESSAGE);
+            return null;
+        }    
+        return m;
+    }
+
+    private Calibration getCalibration() {
+        Calibration c = new Calibration();
+        try {                                                            
+            c.setDates(new Date());
+            c.setMeter(getMeter());
+            c.setError0(new BigDecimal(error0Field.getText()));
+            c.setError1(new BigDecimal(error1Field.getText()));
+            c.setError2(new BigDecimal(error2Field.getText()));
+            c.setError3(new BigDecimal(error3Field.getText()));
+            c.setMeterageSt(new BigDecimal(meterageStField.getText()));
+            c.setMeterageEnd(new BigDecimal(meterageEndField.getText()));
+            c.setDstuNumber(Integer.parseInt(numberDSTUField.getText()));
+            c.setDstuSeal(sealDSTUField.getText());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(FormCalibration.this, e.toString(), 
+                                          getRes("error"), JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+        return c;
     }
 }

@@ -39,7 +39,7 @@ class TypeMetersToData implements TypeMetersDao {
     }
     
     // Returns one entity from current position in the result set or null in case of the exception 
-    private TypeMeters sel(ResultSet rs) {      
+    private TypeMeters convertRow(ResultSet rs) {      
         try {
             TypeMeters tm = new TypeMeters(rs.getInt(1),
                                            rs.getString(2),
@@ -59,7 +59,7 @@ class TypeMetersToData implements TypeMetersDao {
         
         try {
             if (rs != null && rs.next()) {           
-                return sel(rs);
+                return convertRow(rs);
             } else {
                 return null;
             }
@@ -77,7 +77,7 @@ class TypeMetersToData implements TypeMetersDao {
             List<TypeMeters> cs = new ArrayList<>();
             try {
                 while (rs.next()) {
-                    cs.add(sel(rs));                    
+                    cs.add(convertRow(rs));                    
                 }
             } catch (SQLException ex) {
                 Logger.getLogger(CalibrationToData.class.getName()).log(Level.SEVERE, null, ex);

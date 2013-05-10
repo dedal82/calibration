@@ -64,6 +64,10 @@ public class Controler {
         view.addCalibration();
     }
     
+    public void editCalibrationAct() {
+        view.editCalibration();
+    }
+    
     public void refreshData() {
         view.refreshData();
     }
@@ -74,6 +78,10 @@ public class Controler {
 
     public int addCalibration(Calibration c) {
         return eCalibration.insert(c);
+    }
+    
+    public int editCalibration(Calibration c) {
+        return eCalibration.update(c);
     }
 
     public int addMeter(Meter m) {

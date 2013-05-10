@@ -11,7 +11,7 @@ package ua.vynnyk.calibration.view;
 enum Act {
     EXIT("exit"),
     ADD_CALIBRATION("addCalibrationAct"),
-    EDIT_CALIBRATION("exit"),
+    EDIT_CALIBRATION("editCalibrationAct"),
     DELETE_CALIBRATION("exit"),
     REFRESH("refreshData");
     

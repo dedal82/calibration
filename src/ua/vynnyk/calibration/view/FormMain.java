@@ -90,7 +90,7 @@ public class FormMain extends JFrame implements View {
                       
        // дерево 
        Calendar tmpDate = Calendar.getInstance();
-       tmpDate.set(2012, 0, 1); 
+       tmpDate.set(2013, 4, 1); 
        
        tree = new TreeDates(tmpDate.getTime(), new OpenDateInterface() {
             @Override
@@ -160,6 +160,16 @@ public class FormMain extends JFrame implements View {
     @Override
     public void addCalibration() {                
         new FormCalibration(this , getRes("calibration.title"), true, controler).setVisible(true);
+    }
+
+    @Override
+    public void editCalibration() {
+        int index = table.getSelectedRow();
+        if (index != -1) {
+            index = table.convertRowIndexToModel(index);
+            Calibration c = calibrations.get(index);
+            new FormCalibration(this , getRes("calibration.title"), true, controler, c).setVisible(true);
+        }        
     }
     
     private class WinListener extends WindowAdapter {

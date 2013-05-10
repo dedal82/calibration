@@ -39,7 +39,7 @@ class MeterToData implements MeterDao {
     }
     
     // повертає один обєкт з поточного запису в резултсеті
-    private Meter sel(ResultSet rs) {      
+    private Meter convertRow(ResultSet rs) {      
         try {
             Meter m = new Meter(rs.getInt(1),
                                 new TypeMeters(rs.getInt(2)),
@@ -53,11 +53,12 @@ class MeterToData implements MeterDao {
     }
     
     // повертає один обєкт з резултсету
+    @Override
     public Meter select(int id) {
         ResultSet rs = dw.selectRecord(id);
         try {
             if (rs != null && rs.next()) {           
-                return sel(rs);
+                return convertRow(rs);
             } else {
                 return null;
             }
@@ -68,13 +69,14 @@ class MeterToData implements MeterDao {
     }
     
     // повертає сет обєктів з резултсету
+    @Override
     public List<Meter> selects(String condition) {
         ResultSet rs = dw.selectRecords(condition);
         if (rs != null) {
             List<Meter> cs = new ArrayList<>();
             try {
                 while (rs.next()) {
-                    cs.add(sel(rs));                    
+                    cs.add(convertRow(rs));                    
                 }
             } catch (SQLException ex) {
                 Logger.getLogger(CalibrationToData.class.getName()).log(Level.SEVERE, null, ex);
@@ -85,6 +87,7 @@ class MeterToData implements MeterDao {
         }
     }
     
+    @Override
     public int insert(Meter m) {
         List<Object> param = new ArrayList<>();        
         param.add(m.getTypesMeters().getId());
@@ -96,6 +99,7 @@ class MeterToData implements MeterDao {
         return -1;
     }
     
+    @Override
     public int update(Meter m) {     
         List<Object> param = new ArrayList<>();        
         param.add(m.getTypesMeters().getId());
@@ -105,6 +109,7 @@ class MeterToData implements MeterDao {
         return dw.updateRecord(param);        
     }
     
+    @Override
     public int delete(Meter m) {
         return dw.deleteRecord(m.getId());
     }

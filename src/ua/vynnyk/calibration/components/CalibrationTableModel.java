@@ -33,7 +33,7 @@ public class CalibrationTableModel extends AbstracGenerictListTableModel<Calibra
         final Calibration calibtation = dataList.get(i);
         switch (i1) {
             case 0: return calibtation.getId(); 
-            case 1: return calibtation.getMeters().getNumber();
+            case 1: return calibtation.getMeter().getNumber();
             case 2: return calibtation.getError0();
             case 3: return calibtation.getError1();
             case 4: return calibtation.getError2();

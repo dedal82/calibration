@@ -47,7 +47,7 @@ class CalibrationToData implements CalibrationDao {
     }
     
     // повертає один обєкт з поточного запису в резултсеті
-    private Calibration sel(ResultSet rs) {      
+    private Calibration convertRow(ResultSet rs) {      
         try {        
             Calibration c = new Calibration(rs.getInt(1),
                                             new Meter(rs.getInt(2)),
@@ -73,7 +73,7 @@ class CalibrationToData implements CalibrationDao {
         ResultSet rs = dw.selectRecord(id);
         try {
             if (rs != null && rs.next()) {           
-                return sel(rs);
+                return convertRow(rs);
             } else {
                 return null;
             }
@@ -91,7 +91,7 @@ class CalibrationToData implements CalibrationDao {
             List<Calibration> cs = new ArrayList<>();
             try {
                 while (rs.next()) {
-                    cs.add(sel(rs));                    
+                    cs.add(convertRow(rs));                    
                 }
             } catch (SQLException ex) {
                 Logger.getLogger(CalibrationToData.class.getName()).log(Level.SEVERE, null, ex);
@@ -105,7 +105,7 @@ class CalibrationToData implements CalibrationDao {
     @Override
     public int insert(Calibration c) {
         List<Object> param = new ArrayList<>();
-        param.add(c.getMeters().getId());
+        param.add(c.getMeter().getId());
         param.add(c.getDates());
         param.add(c.getError0());
         param.add(c.getError1());
@@ -124,7 +124,7 @@ class CalibrationToData implements CalibrationDao {
     @Override
     public int update(Calibration c) {
         List<Object> param = new ArrayList<>();        
-        param.add(c.getMeters().getId());
+        param.add(c.getMeter().getId());
         param.add(c.getDates());
         param.add(c.getError0());
         param.add(c.getError1());
@@ -147,6 +147,17 @@ class CalibrationToData implements CalibrationDao {
     @Override
     public List<Calibration> selectCalibrationForDate(Date date) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        return selects("where dates = \'" + sdf.format(date) + "\'");
+        List<Calibration> list = selects("where dates = \'" + sdf.format(date) + "\'");
+        setMeters(list);
+        return list;
+    }
+
+    private void setMeters(List<Calibration> list) {
+        MeterDao meterDao = new MeterToData(con);
+        for (Calibration calibration : list) {
+            int id = calibration.getMeter().getId();
+            Meter m = meterDao.select(id);
+            calibration.setMeter(m);
+        }
     }
 }
