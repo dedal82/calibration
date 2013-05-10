@@ -20,15 +20,14 @@ import ua.vynnyk.calibration.model.entity.TypeMeters;
  */
 class MeterToData implements MeterDao {
     
-    private static final String tableName;
-    private static final List<String> fields = new ArrayList<>();
+    private static final String TABLE= "meters";
+    private static final List<String> FIELDS = new ArrayList<>();
     
-    static {
-        tableName = "meters";
-        fields.add("id");               //0
-        fields.add("types");            //1
-        fields.add("number");           //2
-        fields.add("year_produce");     //3        
+    static {        
+        FIELDS.add("id");               //0
+        FIELDS.add("types");            //1
+        FIELDS.add("number");           //2
+        FIELDS.add("year_produce");     //3        
     }
     
     private Connection con;
@@ -36,7 +35,7 @@ class MeterToData implements MeterDao {
 
     MeterToData(Connection con) {
         this.con = con;
-        this.dw = new DataWorker(new QueryBuilder(tableName, fields), con);
+        this.dw = new DataWorker(new QueryBuilder(TABLE, FIELDS), con);
     }
     
     // повертає один обєкт з поточного запису в резултсеті

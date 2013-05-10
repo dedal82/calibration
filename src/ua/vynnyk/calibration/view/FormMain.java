@@ -22,6 +22,7 @@ import ua.vynnyk.calibration.components.treedates.OpenDateInterface;
 import ua.vynnyk.calibration.components.treedates.TreeDates;
 import ua.vynnyk.calibration.controler.Controler;
 import ua.vynnyk.calibration.model.entity.Calibration;
+import ua.vynnyk.l10n.TH;
 
 /**
  *
@@ -61,9 +62,9 @@ public class FormMain extends JFrame implements View {
         setLookAndFeel();
         
        //меню 
-       menuCalibration = new JMenu("Повірка");
-       menuReport = new JMenu("Звіти");
-       menuHelp = new JMenu("Допомога");
+       menuCalibration = new JMenu(getRes("menu.calibration"));
+       menuReport = new JMenu(getRes("menu.report"));
+       menuHelp = new JMenu(getRes("menu.help"));
        
        menuCalibration.add(actions.getAction(Act.ADD_CALIBRATION));
        menuCalibration.add(actions.getAction(Act.EDIT_CALIBRATION));
@@ -155,6 +156,11 @@ public class FormMain extends JFrame implements View {
             node.open();
         }        
     }
+
+    @Override
+    public void addCalibration() {                
+        new FormCalibration(this , getRes("calibration.title"), true, controler).setVisible(true);
+    }
     
     private class WinListener extends WindowAdapter {
 
@@ -163,7 +169,11 @@ public class FormMain extends JFrame implements View {
             controler.exit();
         }
            
-    }   
+    } 
+    
+    private String getRes(String key) {
+        return TH.getString(key);
+    }
     
     private static void setLookAndFeel() {
         try {

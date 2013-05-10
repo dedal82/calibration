@@ -5,7 +5,6 @@
 package ua.vynnyk.calibration.controler;
 
 import java.sql.Connection;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import ua.vynnyk.calibration.model.data.CalibrationDao;
@@ -17,7 +16,6 @@ import ua.vynnyk.calibration.model.entity.Calibration;
 import ua.vynnyk.calibration.model.entity.Flow;
 import ua.vynnyk.calibration.model.entity.Meter;
 import ua.vynnyk.calibration.model.entity.TypeMeters;
-import ua.vynnyk.calibration.view.FormCalibration;
 import ua.vynnyk.calibration.view.View;
 
 /**
@@ -53,9 +51,8 @@ public class Controler {
         this.view = view;
     }
     
-    public List<Calibration> getCalibrations(Date date) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        return eCalibration.selects("where dates = \'" + sdf.format(date) + "\'");
+    public List<Calibration> getCalibrations(Date date) {       
+        return eCalibration.selectCalibrationForDate(date);
     }
         
     public void exit() {
@@ -63,12 +60,24 @@ public class Controler {
         System.exit(0);
     }
     
-    public void addCalibration() {
-        new FormCalibration(null , "Повірка", true).setVisible(true);
+    public void addCalibrationAct() {
+        view.addCalibration();
     }
     
     public void refreshData() {
         view.refreshData();
+    }
+
+    public List<TypeMeters> getTypeMeters() {
+        return eTypeMeters.selectAll();
+    }
+
+    public int addCalibration(Calibration c) {
+        return eCalibration.insert(c);
+    }
+
+    public int addMeter(Meter m) {
+        return eMeter.insert(m);
     }
                     
 }

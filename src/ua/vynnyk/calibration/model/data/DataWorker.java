@@ -52,8 +52,9 @@ public class DataWorker {
         if (queryBilder.getFieldCount() == params.size() + 1) {
             String query = queryBilder.getInsertQuery();               
             return ExecuteSQL(query, params);
-        } 
-        return 0;
+        } else {
+            throw new IllegalArgumentException("Count parameters is wrong");
+        }         
     }
     
     public int updateRecord(List<Object> params) {
@@ -61,7 +62,7 @@ public class DataWorker {
             String query = queryBilder.getUpdateQuery();               
             return ExecuteSQL(query, params);
         } else {
-            return 0;
+            throw new IllegalArgumentException("Count parameters is wrong");
         }
     }
     

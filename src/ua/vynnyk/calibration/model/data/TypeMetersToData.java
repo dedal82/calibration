@@ -19,16 +19,15 @@ import ua.vynnyk.calibration.model.entity.TypeMeters;
  */
 class TypeMetersToData implements TypeMetersDao {
     
-    private static final String tableName;
-    private static final List<String> fields = new ArrayList<>();
+    private static final String TABLE = "types_meters";
+    private static final List<String> FIELDS = new ArrayList<>();
     
     static {
-        tableName = "types_meters";
-        fields.add("id");               //0
-        fields.add("name");             //1
-        fields.add("diameter");         //2
-        fields.add("cycle");            //3
-        fields.add("precisions");       //4        
+        FIELDS.add("id");               //0
+        FIELDS.add("name");             //1
+        FIELDS.add("diameter");         //2
+        FIELDS.add("cycle");            //3
+        FIELDS.add("precisions");       //4        
     }
     
     private Connection con;
@@ -36,7 +35,7 @@ class TypeMetersToData implements TypeMetersDao {
 
     TypeMetersToData(Connection con) {
         this.con = con;
-        this.dw = new DataWorker(new QueryBuilder(tableName, fields), con);
+        this.dw = new DataWorker(new QueryBuilder(TABLE, FIELDS), con);
     }
     
     // Returns one entity from current position in the result set or null in case of the exception 
@@ -97,7 +96,10 @@ class TypeMetersToData implements TypeMetersDao {
         param.add(tm.getDiameter());
         param.add(tm.getCycle());              
         param.add(tm.getPrecisions());              
-        return dw.insertRecord(param);        
+        if (dw.insertRecord(param) == 1) {
+            return dw.getIdentity();
+        }
+        return -1;        
     }
     
     @Override
@@ -115,5 +117,10 @@ class TypeMetersToData implements TypeMetersDao {
     @Override
     public int delete(TypeMeters tm) {
         return dw.deleteRecord(tm.getId());
+    }
+
+    @Override
+    public List<TypeMeters> selectAll() {
+        return selects(null);
     }
 }

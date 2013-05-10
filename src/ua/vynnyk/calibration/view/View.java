@@ -11,5 +11,7 @@ package ua.vynnyk.calibration.view;
 public interface View {
 
     public void refreshData();
+
+    public void addCalibration();
     
 }

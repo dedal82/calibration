@@ -4,6 +4,8 @@
  */
 package ua.vynnyk.calibration.model.data;
 
+import java.util.Date;
+import java.util.List;
 import ua.vynnyk.calibration.model.entity.Calibration;
 
 /**
@@ -11,5 +13,7 @@ import ua.vynnyk.calibration.model.entity.Calibration;
  * @author Admin
  */
 public interface CalibrationDao extends Dao<Calibration>{
+    
+    List<Calibration> selectCalibrationForDate(Date date);
     
 }

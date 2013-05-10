@@ -19,19 +19,18 @@ import ua.vynnyk.calibration.model.entity.Flow;
  */
 class FlowToData implements FlowDao {
     
-    private static final String tableName;
-    private static final List<String> fields = new ArrayList<>();
+    private static final String TABLE = "flows";
+    private static final List<String> FIELDS = new ArrayList<>();
     
-    static {
-        tableName = "flows";
-        fields.add("id");               //0
-        fields.add("diameter");         //1
-        fields.add("capacity1");        //2
-        fields.add("flow1");            //3
-        fields.add("capacity2");        //4
-        fields.add("flow2");            //5
-        fields.add("capacity3");        //6
-        fields.add("flow3");            //7      
+    static {    
+        FIELDS.add("id");               //0
+        FIELDS.add("diameter");         //1
+        FIELDS.add("capacity1");        //2
+        FIELDS.add("flow1");            //3
+        FIELDS.add("capacity2");        //4
+        FIELDS.add("flow2");            //5
+        FIELDS.add("capacity3");        //6
+        FIELDS.add("flow3");            //7      
     }
     
     private Connection con;
@@ -39,7 +38,7 @@ class FlowToData implements FlowDao {
 
     FlowToData(Connection con) {
         this.con = con;
-        this.dw = new DataWorker(new QueryBuilder(tableName, fields), con);
+        this.dw = new DataWorker(new QueryBuilder(TABLE, FIELDS), con);
     }
     
     // повертає один обєкт з поточного запису в резултсеті
@@ -105,7 +104,10 @@ class FlowToData implements FlowDao {
         param.add(f.getFlow2());
         param.add(f.getCapacity3());
         param.add(f.getFlow3());              
-        return dw.insertRecord(param);        
+        if (dw.insertRecord(param) == 1) {
+            return dw.getIdentity();
+        }
+        return -1;        
     }
     
     @Override
