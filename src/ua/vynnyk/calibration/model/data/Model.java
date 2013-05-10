@@ -23,7 +23,7 @@ public interface Model {
      * @param c
      * @return
      */
-    Entity getEntityModel(Class c);
+    <T extends Dao> T getEntityModel(Class c);
 
     /**
      *

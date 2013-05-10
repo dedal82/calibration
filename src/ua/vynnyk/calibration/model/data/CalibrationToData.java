@@ -18,23 +18,24 @@ import ua.vynnyk.calibration.model.entity.Meter;
  *
  * @author vynnyk
  */
-class CalibrationToData implements Entity<Calibration> {
-    private static final String tableName;
+class CalibrationToData implements CalibrationDao {
+    private static final String tableName = "calibrations";
     private static final List<String> fields = new ArrayList<>();
-    static {
-        tableName = "calibrations";
-        fields.add("id");               //0
-        fields.add("meter");            //1
-        fields.add("dates");            //2
-        fields.add("error0");           //3
-        fields.add("error1");           //4
-        fields.add("error2");           //5
-        fields.add("error3");           //6
-        fields.add("meterage_st");      //7
-        fields.add("meterage_end");     //8
-        fields.add("dstu_number");      //9
-        fields.add("dstu_seal");        //10
-    }
+    
+//    static {
+//        
+//        fields.add("id");               //0
+//        fields.add("meter");            //1
+//        fields.add("dates");            //2
+//        fields.add("error0");           //3
+//        fields.add("error1");           //4
+//        fields.add("error2");           //5
+//        fields.add("error3");           //6
+//        fields.add("meterage_st");      //7
+//        fields.add("meterage_end");     //8
+//        fields.add("dstu_number");      //9
+//        fields.add("dstu_seal");        //10
+//    }
     private Connection con;
     private DataWorker dw;
 

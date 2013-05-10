@@ -27,18 +27,18 @@ public class ModelImpl implements Model {
     }
            
     @Override
-    public Entity getEntityModel(Class c) {                                    
+    public <T extends Dao> T getEntityModel(Class c) {                                    
         if (c == Calibration.class) {
-            return (Entity) new CalibrationToData(con);
+            return (T) new CalibrationToData(con);
         }     
         if (c == Meter.class) {
-            return (Entity) new MeterToData(con);
+            return (T) new MeterToData(con);
         } 
         if (c == TypeMeters.class) {
-            return (Entity) new TypeMetersToData(con);
+            return (T) new TypeMetersToData(con);
         } 
         if (c == Flow.class) {
-            return (Entity) new FlowToData(con);
+            return (T) new FlowToData(con);
         } 
         return null;
     }

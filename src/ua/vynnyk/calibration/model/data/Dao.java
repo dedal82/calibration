@@ -11,7 +11,7 @@ import java.util.List;
  * @param <T> - entity type in model
  * @author vynnyk
  */
-public interface Entity<T> {
+interface Dao<T> {
 
     /**
      * Selects the entity from a data storage

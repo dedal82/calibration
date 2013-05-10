@@ -17,7 +17,7 @@ import ua.vynnyk.calibration.model.entity.Flow;
  *
  * @author vynnyk
  */
-class FlowToData implements Entity<Flow> {
+class FlowToData implements FlowDao {
     
     private static final String tableName;
     private static final List<String> fields = new ArrayList<>();
@@ -61,6 +61,7 @@ class FlowToData implements Entity<Flow> {
     }
     
     // повертає один обєкт з резултсету
+    @Override
     public Flow select(int id) {
         ResultSet rs = dw.selectRecord(id);
         try {
@@ -76,6 +77,7 @@ class FlowToData implements Entity<Flow> {
     }
     
     // повертає сет обєктів з резултсету
+    @Override
     public List<Flow> selects(String condition) {
         ResultSet rs = dw.selectRecords(condition);
         if (rs != null) {
@@ -93,6 +95,7 @@ class FlowToData implements Entity<Flow> {
         }
     }
     
+    @Override
     public int insert(Flow f) {
         List<Object> param = new ArrayList<>();        
         param.add(f.getDiameter());
@@ -105,6 +108,7 @@ class FlowToData implements Entity<Flow> {
         return dw.insertRecord(param);        
     }
     
+    @Override
     public int update(Flow f) {     
         List<Object> param = new ArrayList<>();        
         param.add(f.getDiameter());
@@ -118,6 +122,7 @@ class FlowToData implements Entity<Flow> {
         return dw.updateRecord(param);        
     }
     
+    @Override
     public int delete(Flow f) {
         return dw.deleteRecord(f.getId());
     }
