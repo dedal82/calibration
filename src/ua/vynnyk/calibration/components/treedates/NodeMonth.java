@@ -41,7 +41,7 @@ public class NodeMonth extends Node {
         final long now = System.currentTimeMillis();
         Calendar tmpDate = Calendar.getInstance();
         tmpDate.setTime(getDate());
-        int max = tmpDate.getMaximum(Calendar.DAY_OF_MONTH);
+        int max = tmpDate.getActualMaximum(Calendar.DAY_OF_MONTH);
         for (int i = 0; i < max && tmpDate.getTimeInMillis() < now; i++) {        
             listDate.add(tmpDate.getTime());
             tmpDate.add(Calendar.DAY_OF_MONTH, 1);          
