@@ -5,6 +5,7 @@
 package ua.vynnyk.calibration.controler;
 
 import java.sql.Connection;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import ua.vynnyk.calibration.model.data.CalibrationDao;
@@ -68,8 +69,16 @@ public class Controler {
         view.editCalibration();
     }
     
+    public void deleteCalibrationAct() {
+        view.deleteCalibration();
+    }
+    
     public void refreshData() {
         view.refreshData();
+    }
+    
+    public void typeMetersDictionary() {
+        view.typeMetersDictionary();
     }
 
     public List<TypeMeters> getTypeMeters() {
@@ -86,6 +95,35 @@ public class Controler {
 
     public int addMeter(Meter m) {
         return eMeter.insert(m);
+    }
+
+    public int updCalibration(Calibration c) {
+        if (checkDate(c)) {
+            int i = eMeter.update(c.getMeter());
+            return i == 1 ? eCalibration.update(c) : 0;
+        } 
+        return 0;
+    }
+
+    public int deleteCalibration(Calibration c) {
+        return checkDate(c) ? eCalibration.delete(c) : 0;        
+    }
+    
+    private boolean checkDate(Calibration c) {        
+        final Date inDataDate = eCalibration.select(c.getId()).getDates();        
+        final Date curDate = trimDate(new Date());
+        return curDate.equals(inDataDate);
+    }
+    
+    private Date trimDate(Date date) {
+        Calendar cal = Calendar.getInstance();
+        cal.clear();
+        cal.setTime( date );
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        return cal.getTime();
     }
                     
 }

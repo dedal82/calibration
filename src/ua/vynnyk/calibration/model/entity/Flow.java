@@ -89,6 +89,27 @@ public final class Flow {
     public void setFlow3(BigDecimal flow3) {
         this.flow3 = flow3;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 17;
+        hash = 31 * hash + this.id;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Flow other = (Flow) obj;
+        if (this.id != other.id) {
+            return false;
+        }
+        return true;
+    }
+    
 }
-
-

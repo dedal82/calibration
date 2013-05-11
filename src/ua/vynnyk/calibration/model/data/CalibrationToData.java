@@ -129,8 +129,7 @@ class CalibrationToData implements CalibrationDao {
         param.add(c.getError0());
         param.add(c.getError1());
         param.add(c.getError2());
-        param.add(c.getError3());
-        param.add(c.getDates());
+        param.add(c.getError3());     
         param.add(c.getMeterageSt());
         param.add(c.getMeterageEnd());
         param.add(c.getDstuNumber());

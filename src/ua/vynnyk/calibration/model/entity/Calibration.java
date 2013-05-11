@@ -4,18 +4,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 public final class Calibration {
-     
-     public static String[] title = new String[] {"№",
-                                                  "Водомір",
-                                                  "Початкова похибка",
-                                                  "Похибка 1",
-                                                  "Похибка 2",
-                                                  "Похибка 3",
-                                                  "Показник зняття",
-                                                  "Показник встановлення",
-                                                  "ДСТУ №",
-                                                  "ДСТУ пломба"};
-    
+              
      private int id;
      private Meter meter;
      private Date dates;
@@ -131,6 +120,28 @@ public final class Calibration {
     public void setDstuSeal(String dstuSeal) {
         this.dstuSeal = dstuSeal;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 17;
+        hash = 31 * hash + this.id;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Calibration other = (Calibration) obj;
+        if (this.id != other.id) {
+            return false;
+        }
+        return true;
+    }
+    
+    
 }
-
-

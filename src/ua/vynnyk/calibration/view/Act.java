@@ -12,8 +12,9 @@ enum Act {
     EXIT("exit"),
     ADD_CALIBRATION("addCalibrationAct"),
     EDIT_CALIBRATION("editCalibrationAct"),
-    DELETE_CALIBRATION("exit"),
-    REFRESH("refreshData");
+    DELETE_CALIBRATION("deleteCalibrationAct"),
+    REFRESH("refreshData"),
+    TYPE_METERS("typeMetersDictionary");
     
     private String methodName;
     

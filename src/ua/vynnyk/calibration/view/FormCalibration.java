@@ -5,11 +5,14 @@
 package ua.vynnyk.calibration.view;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.math.BigDecimal;
 import java.util.Date;
 import javax.swing.JButton;
@@ -34,8 +37,8 @@ import ua.vynnyk.l10n.TH;
  * @author vynnyk
  */
 public class FormCalibration extends JDialog {
-    private Frame frame;
-    private Controler controler;
+
+    private final Controler controler;
     private Calibration calibration;    
     private JButton addButton;
     private JButton updButton;
@@ -54,19 +57,19 @@ public class FormCalibration extends JDialog {
     private JTextField sealDSTUField;
         
     public FormCalibration(Frame frame, String string, boolean bln, Controler controler) {
-        super(frame, string, bln);
-        this.frame = frame; 
+        super(frame, string, bln);     
         this.controler = controler;
         initComponents();
+        setLocationRelativeTo(frame);
     }
     
     public FormCalibration(Frame frame, String string, boolean bln, Controler controler, Calibration c) {
         super(frame, string, bln);
-        this.frame = frame; 
         this.controler = controler;
         this.calibration = c;
         
         initComponents();
+        setLocationRelativeTo(frame);
         
         setCalibration(c);
     }
@@ -134,13 +137,13 @@ public class FormCalibration extends JDialog {
         add(panel, BorderLayout.CENTER);
         
         Dimension btnDimension = new Dimension(95, 28);
-        addButton = new JButton("Добавити");
+        addButton = new JButton(getRes("add"));
         addButton.setPreferredSize(btnDimension);
-        updButton = new JButton("Змінити");
+        updButton = new JButton(getRes("edit"));
         updButton.setPreferredSize(btnDimension);
-        delButton = new JButton("Видалити");
+        delButton = new JButton(getRes("delete"));
         delButton.setPreferredSize(btnDimension);
-        closeButton = new JButton("Закрити");
+        closeButton = new JButton(getRes("close"));
         closeButton.setPreferredSize(btnDimension);
         
         JPanel panelButtons = new JPanel(new FlowLayout(FlowLayout.RIGHT));
@@ -150,8 +153,7 @@ public class FormCalibration extends JDialog {
         panelButtons.add(delButton);
         panelButtons.add(closeButton);
         
-        pack();
-        setLocationRelativeTo(frame);
+        pack();       
         setResizable(false);             
         
         addListeners(); 
@@ -165,7 +167,20 @@ public class FormCalibration extends JDialog {
     }
 
     private void addListeners() {
+        Selecter s = new Selecter();
+        meterField.addFocusListener(s);    
+        yearField.addFocusListener(s);
+        error0Field.addFocusListener(s);
+        error1Field.addFocusListener(s);
+        error2Field.addFocusListener(s);
+        error3Field.addFocusListener(s);
+        meterageStField.addFocusListener(s);
+        meterageEndField.addFocusListener(s);
+        numberDSTUField.addFocusListener(s);
+        sealDSTUField.addFocusListener(s);
+                
         addButton.addActionListener(new ActionListener() {
+            
             @Override
             public void actionPerformed(ActionEvent ae) {               
                 Calibration c = getCalibration();
@@ -176,15 +191,66 @@ public class FormCalibration extends JDialog {
                 
                 if (c.getId() > 0) { 
                     calibration = c;
-                    controler.refreshData();                                                       
+                    controler.refreshData();
+                    meterField.requestFocus();
                 } else {
                     JOptionPane.showMessageDialog(FormCalibration.this, getRes("error.addcalibration"), 
                                                   getRes("error"), JOptionPane.ERROR_MESSAGE);
                 }   
             }           
         });
+        
+        updButton.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (calibration == null) {
+                    JOptionPane.showMessageDialog(FormCalibration.this, getRes("error.updnullcalibration"), 
+                                                  getRes("error"), JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                
+                Calibration c = getUpdCalibration();
+                               
+                if (controler.updCalibration(c) == 1) {
+                    calibration = c;
+                    controler.refreshData();
+                    meterField.requestFocus();
+                } else {
+                    JOptionPane.showMessageDialog(FormCalibration.this, getRes("error.updcalibration"), 
+                                                  getRes("error"), JOptionPane.ERROR_MESSAGE);
+                }
+            }
+
+            
+        });
+        
+        delButton.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (calibration == null) {
+                    JOptionPane.showMessageDialog(FormCalibration.this, getRes("error.delnullcalibration"), 
+                                                  getRes("error"), JOptionPane.ERROR_MESSAGE);
+                    return;
+                }                
+                if (JOptionPane.showConfirmDialog(FormCalibration.this, getRes("message.deletecalibration"),
+                                                  getRes("message"), JOptionPane.YES_NO_OPTION)
+                                                  == JOptionPane.YES_OPTION) {                          
+                    if (controler.deleteCalibration(calibration) == 1) {
+                        calibration = null;
+                        controler.refreshData(); 
+                        meterField.requestFocus();
+                    } else {
+                        JOptionPane.showMessageDialog(FormCalibration.this, getRes("error.delcalibration"), 
+                                                   getRes("error"), JOptionPane.ERROR_MESSAGE);
+                    }
+                } 
+            }
+        });
                 
         closeButton.addActionListener(new ActionListener() {
+            
             @Override
             public void actionPerformed(ActionEvent e) {
                 setVisible(false);
@@ -193,6 +259,7 @@ public class FormCalibration extends JDialog {
         });
     }
 
+    // Setting data in form's fields from entity object
     private void setCalibration(Calibration c) {
         final Meter m = c.getMeter();
         meterField.setText(m.getNumber());
@@ -208,6 +275,7 @@ public class FormCalibration extends JDialog {
         numberDSTUField.setText(Integer.toString(c.getDstuNumber()));
     }
     
+    //Getting Meter entity from form's fields
     private Meter getMeter() {
         Meter m = new Meter();
         try {
@@ -222,7 +290,8 @@ public class FormCalibration extends JDialog {
         }    
         return m;
     }
-
+    
+    //Getting Calibration entity from form's fields
     private Calibration getCalibration() {
         Calibration c = new Calibration();
         try {                                                            
@@ -242,5 +311,28 @@ public class FormCalibration extends JDialog {
             return null;
         }
         return c;
+    }
+    
+    //Getting Calibration entity from form's fields and set ID from database;
+    private Calibration getUpdCalibration() {
+        Calibration c = getCalibration();
+        c.setId(calibration.getId());
+        c.getMeter().setId(calibration.getMeter().getId());        
+        return c;        
+    }
+    
+    private class Selecter implements FocusListener {
+
+        @Override
+        public void focusGained(FocusEvent e) {
+            Component c = e.getComponent();
+            if (c instanceof JTextField) {
+                ((JTextField) c).selectAll();
+            }            
+        }
+
+        @Override
+        public void focusLost(FocusEvent e) { }
+        
     }
 }

@@ -61,7 +61,28 @@ public final class TypeMeters {
     @Override
     public String toString() {
         return name;
-    }        
+    }    
+
+    @Override
+    public int hashCode() {
+        int hash = 17;
+        hash = 31 * hash + this.id;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final TypeMeters other = (TypeMeters) obj;
+        if (this.id != other.id) {
+            return false;
+        }
+        return true;
+    }
+        
 }
-
-

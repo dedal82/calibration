@@ -13,19 +13,32 @@ import ua.vynnyk.calibration.model.entity.Calibration;
  * @author vynnyk
  */
 public class CalibrationTableModel extends AbstracGenerictListTableModel<Calibration> {
-    private static final Class[] columnClasses = {Integer.class,
-                                                  String.class,
-                                                  BigDecimal.class,
-                                                  BigDecimal.class,
-                                                  BigDecimal.class,
-                                                  BigDecimal.class,
-                                                  BigDecimal.class,
-                                                  BigDecimal.class,
-                                                  String.class,
-                                                  String.class};
+    
+    private static final String[] TITLES = new String[] {"№",
+                                                         "Водомір",
+                                                         "Початкова похибка",
+                                                         "Похибка 1",
+                                                         "Похибка 2",
+                                                         "Похибка 3",
+                                                         "Показник зняття",
+                                                         "Показник встановлення",
+                                                         "ДСТУ №",
+                                                         "ДСТУ пломба"};
+    
+    private static final Class[] COLUMN_CLASSES = {Integer.class,
+                                                   String.class,
+                                                   BigDecimal.class,
+                                                   BigDecimal.class,
+                                                   BigDecimal.class,
+                                                   BigDecimal.class,
+                                                   BigDecimal.class,
+                                                   BigDecimal.class,
+                                                   Integer.class,
+                                                   String.class};
+    
     
     public CalibrationTableModel(List<Calibration> dataList) {
-        super(Calibration.title, dataList);
+        super(TITLES, dataList);
     }
 
     @Override
@@ -42,14 +55,13 @@ public class CalibrationTableModel extends AbstracGenerictListTableModel<Calibra
             case 7: return calibtation.getMeterageEnd();
             case 8: return calibtation.getDstuNumber();
             case 9: return calibtation.getDstuSeal();
-        }        
-        return null;
+            default: return null;
+        }                
     } 
 
     @Override
     public Class<?> getColumnClass(int i) {
-        return columnClasses[i];
+        return COLUMN_CLASSES[i];
     }
-    
-    
+        
 }
