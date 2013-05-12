@@ -7,6 +7,8 @@ package ua.vynnyk.calibration.view;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
@@ -80,7 +82,10 @@ public class FormMain extends JFrame implements View {
         menuCalibration.addSeparator();
         menuCalibration.add(actions.getAction(Act.EXIT));
         
+        menuDictionaries.add(actions.getAction(Act.TYPE_DIAMETERS));
         menuDictionaries.add(actions.getAction(Act.TYPE_METERS));
+        
+        menuHelp.add(actions.getAction(Act.ABOUT));
         
         menuBar = new JMenuBar();
         menuBar.add(menuCalibration);
@@ -97,6 +102,7 @@ public class FormMain extends JFrame implements View {
         toolBar.add(new JButton(actions.getAction(Act.REFRESH)));
         toolBar.addSeparator();
         
+        toolBar.add(new JButton(actions.getAction(Act.TYPE_DIAMETERS)));
         toolBar.add(new JButton(actions.getAction(Act.TYPE_METERS)));
         toolBar.addSeparator();
         
@@ -123,6 +129,16 @@ public class FormMain extends JFrame implements View {
         table.getColumnModel().getColumn(0).setPreferredWidth(MAX_WIDTH_ID);
         table.setFillsViewportHeight(true);
         table.setAutoCreateRowSorter(true);
+
+        table.addMouseListener(new MouseAdapter() {
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    controler.editCalibrationAct();
+                }
+            }            
+        });
         //грід
        
         splitPane = new JSplitPane();       
@@ -134,12 +150,9 @@ public class FormMain extends JFrame implements View {
         //панель статусу
         status1 = new JLabel(getRes("count_calibrations"));
         status1.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
-        //status1.setPreferredSize(new Dimension(150, 22));
         status2 = new JLabel("");
         status2.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
-        //status2.setPreferredSize(new Dimension(150, 22));
-        statusPanel = new JPanel();
-        //statusPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));       
+        statusPanel = new JPanel();       
         statusPanel.setLayout(new GridLayout(1, 5, 3, 3));      
         statusPanel.add(status1);
         statusPanel.add(status2);
@@ -221,6 +234,16 @@ public class FormMain extends JFrame implements View {
     @Override
     public void typeMetersDictionary() {
         new FormTypeMeters(this , getRes("type_meters.title"), true, controler).setVisible(true);
+    }
+    
+    @Override
+    public void typeDiameters() {
+        new FormTypeDiameter(this , getRes("type_diameters.title"), true, controler).setVisible(true);
+    }
+
+    @Override
+    public void showAbout() {
+        new FormAbout(this, true).setVisible(true);
     }
     
     private class WinListener extends WindowAdapter {

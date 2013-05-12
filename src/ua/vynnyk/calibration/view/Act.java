@@ -14,7 +14,9 @@ enum Act {
     EDIT_CALIBRATION("editCalibrationAct"),
     DELETE_CALIBRATION("deleteCalibrationAct"),
     REFRESH("refreshData"),
-    TYPE_METERS("typeMetersDictionary");
+    TYPE_METERS("typeMetersDictionary"),
+    TYPE_DIAMETERS("typeDiameters"),
+    ABOUT("aboutForm");
     
     private String methodName;
     

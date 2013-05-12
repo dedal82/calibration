@@ -19,5 +19,9 @@ public interface View {
     public void deleteCalibration();
 
     public void typeMetersDictionary();
+
+    public void typeDiameters();
+
+    public void showAbout();
     
 }

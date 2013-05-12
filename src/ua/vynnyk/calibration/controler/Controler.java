@@ -80,6 +80,10 @@ public class Controler {
     public void typeMetersDictionary() {
         view.typeMetersDictionary();
     }
+    
+    public void typeDiameters() {
+        view.typeDiameters();
+    }
 
     public List<TypeMeters> getTypeMeters() {
         return eTypeMeters.selectAll();
@@ -109,12 +113,16 @@ public class Controler {
         return checkDate(c) ? eCalibration.delete(c) : 0;        
     }
     
+    public List<Flow> getFlows() {
+        return eFlow.selectAll();
+    }
+    
     private boolean checkDate(Calibration c) {        
         final Date inDataDate = eCalibration.select(c.getId()).getDates();        
         final Date curDate = trimDate(new Date());
         return curDate.equals(inDataDate);
     }
-    
+        
     private Date trimDate(Date date) {
         Calendar cal = Calendar.getInstance();
         cal.clear();
@@ -125,5 +133,21 @@ public class Controler {
         cal.set(Calendar.MILLISECOND, 0);
         return cal.getTime();
     }
-                    
+
+    public int addTypeMeters(TypeMeters tm) {
+        return eTypeMeters.insert(tm);
+    }
+
+    public int editTypeMeters(TypeMeters tm) {
+        return eTypeMeters.update(tm);
+    }
+
+    public int deleteTypeMeters(TypeMeters tm) {
+        return eTypeMeters.delete(tm);
+    }
+    
+    public void aboutForm() {
+        view.showAbout();
+    }
+                        
 }

@@ -36,7 +36,8 @@ import ua.vynnyk.l10n.TH;
  *
  * @author vynnyk
  */
-public class FormCalibration extends JDialog {
+class FormCalibration extends JDialog {
+    private static final int FIELD_WIDTH = 20;
 
     private final Controler controler;
     private Calibration calibration;    
@@ -76,40 +77,40 @@ public class FormCalibration extends JDialog {
 
     private void initComponents() {
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        JLabel meterLabel = new JLabel("Заводський №");
-        meterField = new JTextField(20);
-        JButton meterButton = new JButton("Знайти...");
+        JLabel meterLabel = new JLabel(getRes("calibration.number"));
+        meterField = new JTextField(FIELD_WIDTH);
+        JButton meterButton = new JButton(getRes("calibration.find"));
         CompositeComponent componentMeter = new CompositeComponent(meterField, meterButton);
         
-        JLabel typesLabel = new JLabel("Тип водоміра");
+        JLabel typesLabel = new JLabel(getRes("calibration.type"));
         typesComboBox = new JComboBox(controler.getTypeMeters().toArray());
                 
-        JLabel yearLabel = new JLabel("Рік виробництва");
-        yearField = new JTextField(20);
+        JLabel yearLabel = new JLabel(getRes("calibration.yearproduce"));
+        yearField = new JTextField(FIELD_WIDTH);
         
-        JLabel error0Label = new JLabel("Початкова похибка");
-        error0Field = new JTextField(20);
+        JLabel error0Label = new JLabel(getRes("calibration.error0"));
+        error0Field = new JTextField(FIELD_WIDTH);
         
-        JLabel error1Label = new JLabel("Похибка 1");
-        error1Field = new JTextField(20);
+        JLabel error1Label = new JLabel(getRes("calibration.error1"));
+        error1Field = new JTextField(FIELD_WIDTH);
         
-        JLabel error2Label = new JLabel("Похибка 2");
-        error2Field = new JTextField(20);
+        JLabel error2Label = new JLabel(getRes("calibration.error2"));
+        error2Field = new JTextField(FIELD_WIDTH);
         
-        JLabel error3Label = new JLabel("Похибка 3");
-        error3Field = new JTextField(20);
+        JLabel error3Label = new JLabel(getRes("calibration.error3"));
+        error3Field = new JTextField(FIELD_WIDTH);
         
-        JLabel meterageStLabel = new JLabel("Початковий показник");
-        meterageStField = new JTextField(20);
+        JLabel meterageStLabel = new JLabel(getRes("calibration.meterage_st"));
+        meterageStField = new JTextField(FIELD_WIDTH);
         
-        JLabel meterageEndLabel = new JLabel("Кінцевий показник");
-        meterageEndField = new JTextField(20);
+        JLabel meterageEndLabel = new JLabel(getRes("calibration.metarage_end"));
+        meterageEndField = new JTextField(FIELD_WIDTH);
         
-        JLabel numberDSTULabel = new JLabel("Довідка ДСТУ");
-        numberDSTUField = new JTextField(20);
+        JLabel numberDSTULabel = new JLabel(getRes("calibration.number_dstu"));
+        numberDSTUField = new JTextField(FIELD_WIDTH);
         
-        JLabel sealDSTULabel = new JLabel("Пломба ДСТУ");
-        sealDSTUField = new JTextField(20);
+        JLabel sealDSTULabel = new JLabel(getRes("calibration.seal_dstu"));
+        sealDSTUField = new JTextField(FIELD_WIDTH);
         
         JPanel panel = new JPanel(new MigLayout("wrap 4","[align right][][align right][]",""));        
         panel.add(meterLabel);

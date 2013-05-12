@@ -128,4 +128,9 @@ class FlowToData implements FlowDao {
     public int delete(Flow f) {
         return dw.deleteRecord(f.getId());
     }
+
+    @Override
+    public List<Flow> selectAll() {
+        return selects(null);
+    }
 }
